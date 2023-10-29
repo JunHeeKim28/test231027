@@ -117,6 +117,10 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+//api project(':react-native-bluetooth-serial-next')
+//implementation project(':react-native-bluetooth-serial-next')
+
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

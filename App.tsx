@@ -8,6 +8,7 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import Navigation from './src/navigations/Navigation';
 import CocktailRecipeScreen from './src/screens/CocktailRecipeScreen';
 import DeviceRegisterScreen from './src/screens/DeviceRegisterScreen';
+
 const Stack = createStackNavigator();
 
 function App() {

@@ -1,72 +1,36 @@
-import React, {Component} from 'react';
-import {View, Text, Button, FlatList} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, Button} from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
-class BluetoothApp extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      devices: [],
-      connectedDevice: null,
-    };
-  }
+const RaspberryPiBluetoothScreen = () => {
+  const [isConnected, setIsConnected] = useState(false);
 
-  componentDidMount() {
-    BleManager.start({showAlert: false});
+  const raspberryPiAddress = 'D8:3A:DD:1E:A8:72'; // Raspberry Pi의 Bluetooth 주소
+  const port = 1; // RFCOMM 포트 번호
 
-    // Bluetooth 디바이스 스캔 이벤트 처리
-    BleManager.onDiscover(device => {
-      // 스캔된 디바이스를 state에 추가
-      this.setState(prevState => ({
-        devices: [...prevState.devices, device],
-      }));
-    });
-  }
-
-  scanForDevices = () => {
-    this.setState({devices: []});
-    BleManager.scan([], 5, true); // 스캔 시간(초)을 조정하세요
+  const connectToRaspberryPi = async () => {
+    try {
+      const connected = await BleManager.connect(raspberryPiAddress, port);
+      if (connected) {
+        setIsConnected(true);
+      } else {
+        console.error('Connection error1');
+      }
+    } catch (error) {
+      console.error('Connection error2', error);
+    }
   };
 
-  connectToDevice = device => {
-    BleManager.connect(device.id)
-      .then(() => {
-        console.log('Connected to device:', device.name);
-        this.setState({connectedDevice: device});
-      })
-      .catch(error => {
-        console.error('Connection error:', error);
-      });
-  };
-
-  renderItem = ({item}) => (
+  return (
     <View>
-      <Text>{item.name || 'Unknown'}</Text>
-      <Text>{item.id}</Text>
-      <Button title="Connect" onPress={() => this.connectToDevice(item)} />
+      <Text>Connected to Raspberry Pi: {isConnected ? 'Yes' : 'No'}</Text>
+      <Button
+        title="Connect to Raspberry Pi"
+        onPress={connectToRaspberryPi}
+        disabled={isConnected}
+      />
     </View>
   );
+};
 
-  render() {
-    return (
-      <View>
-        <Button title="Scan for Devices" onPress={this.scanForDevices} />
-
-        {this.state.connectedDevice && (
-          <Text>
-            Connected to: {this.state.connectedDevice.name || 'Unknown'}
-          </Text>
-        )}
-
-        <Text>Discovered Devices:</Text>
-        <FlatList
-          data={this.state.devices}
-          keyExtractor={item => item.id}
-          renderItem={this.renderItem}
-        />
-      </View>
-    );
-  }
-}
-
-export default BluetoothApp;
+export default RaspberryPiBluetoothScreen;
