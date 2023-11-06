@@ -99,7 +99,7 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity>
-        <Text style={styles.txt}>내 정보 수정하기</Text>
+        <Text style={styles.txt}>내 정보 수정하기!</Text>
       </TouchableOpacity>
       <TouchableOpacity>
         <Text style={styles.txt}>기기 등록 수정하기</Text>
@@ -144,7 +144,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000000',
-
     justifyContent: 'center',
   },
   txt: {

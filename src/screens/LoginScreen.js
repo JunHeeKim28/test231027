@@ -10,10 +10,18 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import {Alert} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
 const LoginScreen = ({navigation}) => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const goToFindIDScreen = () => {
+    navigation.navigate('FindID');
+  };
+  const goToFindPWScreen = () => {
+    navigation.navigate('FindPW');
+  };
 
   const handleLogin = () => {
     axios
@@ -67,11 +75,11 @@ const LoginScreen = ({navigation}) => {
         <Text style={styles.loginButtonText}>로그인</Text>
       </TouchableOpacity>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.btn2}>
+        <TouchableOpacity style={styles.btn2} onPress={goToFindIDScreen}>
           <Text style={styles.btnText2}>아이디 찾기</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.btn2}>
+        <TouchableOpacity style={styles.btn2} onPress={goToFindPWScreen}>
           <Text style={styles.btnText2}>비밀번호 찾기</Text>
         </TouchableOpacity>
       </View>

@@ -4,10 +4,11 @@ import {
   StyleSheet,
   Dimensions,
   Text,
+  Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import CocktailRecipeScreen from './CocktailRecipeScreen';
-import DeviceRegisterScreen from './DeviceRegisterScreen';
+//import CocktailRecipeScreen from './CocktailRecipeScreen';
+//import DeviceRegisterScreen from './DeviceRegisterScreen';
 
 //화면 가로, 세로 길이
 const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
@@ -19,6 +20,10 @@ const buttonHeight = buttonSize / 2;
 const MainScreen = () => {
   const navigation = useNavigation();
 
+  const goToFavoritesScreen = () => {
+    navigation.navigate('Favorites');
+  };
+
   const gotoCocktailRecipeScreen = () => {
     navigation.navigate('CocktailRecipe');
   };
@@ -26,21 +31,44 @@ const MainScreen = () => {
   const gotoDeviceRegisterScreen = () => {
     navigation.navigate('DeviceRegister');
   };
+  const goToInfoScreen = () => {
+    navigation.navigate('Info');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, {width: buttonSize, height: buttonSize + 10}]}>
-          <Text style={styles.buttonText}>칵테일 제조</Text>
+          <View style={{flexDirection: 'column', alignItems: 'center'}}>
+            <Image
+              source={require('../../assets/cocktail.png')} // 이미지 파일 경로 설정
+              style={styles.image1}
+            />
+            <Text style={styles.buttonText}>칵테일 제조</Text>
+          </View>
         </TouchableOpacity>
         <View style={styles.buttonColumn}>
           <TouchableOpacity
-            style={[styles.button, {width: buttonSize, height: buttonHeight}]}>
-            <Text style={styles.buttonText}>즐겨찾기</Text>
+            style={[styles.button, {width: buttonSize, height: buttonHeight}]}
+            onPress={goToFavoritesScreen}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Image
+                source={require('../../assets/star.png')}
+                style={styles.image2}
+              />
+              <Text style={styles.buttonText}>즐겨찾기</Text>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={goToInfoScreen}
             style={[styles.button, {width: buttonSize, height: buttonHeight}]}>
-            <Text style={styles.buttonText}>이용방법</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Image
+                source={require('../../assets/information.png')}
+                style={styles.image2}
+              />
+              <Text style={styles.buttonText}>이용방법</Text>
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -100,10 +128,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#be289d',
     borderRadius: 10,
   },
+  image1: {
+    width: 100, // 이미지의 너비
+    height: 100, // 이미지의 높이
+    marginLeft: 10, // 텍스트와 이미지 사이의 간격을 조절하세요
+    marginBottom: 10,
+  },
+  image2: {
+    width: 50,
+    height: 50,
+    marginRight: 5,
+  },
   buttonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 26,
     textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 

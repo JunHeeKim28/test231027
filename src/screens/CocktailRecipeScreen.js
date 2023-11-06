@@ -1,323 +1,200 @@
-//이주 성공
-import {useState, useEffect} from 'react';
-import {
-  TextInput,
-  View,
-  Text,
-  TouchableOpacity,
-  Modal,
-  StyleSheet,
-  ScrollView,
-  Alert,
-  Button,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, Button, StyleSheet, Modal} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function CocktailRecipeScreen() {
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [ingredients, setIngredients] = useState({});
+const CocktailRecipeScreen = () => {
+  const [rumType, setRumType] = useState('');
+  const [rumAmount, setRumAmount] = useState('');
+  const [ginType, setGinType] = useState('');
+  const [ginAmount, setGinAmount] = useState('');
+  const [beerType, setBeerType] = useState('');
+  const [beerAmount, setBeerAmount] = useState('');
+  const [juiceType, setJuiceType] = useState('');
+  const [juiceAmount, setJuiceAmount] = useState('');
   const [recipeList, setRecipeList] = useState([]);
-  const [recipeTitle, setRecipeTitle] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
   const STORAGE_KEY = 'cocktailRecipes';
 
   useEffect(() => {
     loadRecipesFromStorage();
   }, []);
 
-  // AsyncStorage에서 저장된 레시피 불러오기
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const saveRecipe = async () => {
+    if (
+      rumType === '' ||
+      rumAmount === '' ||
+      ginType === '' ||
+      ginAmount === '' ||
+      beerType === '' ||
+      beerAmount === '' ||
+      juiceType === '' ||
+      juiceAmount === ''
+    ) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    const newRecipe = {
+      rum: rumType,
+      rumAmount: rumAmount,
+      gin: ginType,
+      ginAmount: ginAmount,
+      beer: beerType,
+      beerAmount: beerAmount,
+      juice: juiceType,
+      juiceAmount: juiceAmount,
+    };
+
+    setRecipeList([...recipeList, newRecipe]);
+    saveRecipesToStorage([...recipeList, newRecipe]);
+    toggleModal();
+  };
+
   const loadRecipesFromStorage = async () => {
     try {
-      //저장되어있지 않을때
       const savedRecipesJSON = await AsyncStorage.getItem(STORAGE_KEY);
       if (savedRecipesJSON !== null) {
         const savedRecipes = JSON.parse(savedRecipesJSON);
         setRecipeList(savedRecipes);
       }
     } catch (error) {
-      console.error('데이터 로딩 오류:', error);
+      console.error('Error loading data:', error);
     }
   };
 
-  // AsyncStorage에 레시피 저장
   const saveRecipesToStorage = async recipes => {
     try {
       const recipesJSON = JSON.stringify(recipes);
       await AsyncStorage.setItem(STORAGE_KEY, recipesJSON);
     } catch (error) {
-      console.error('데이터 저장 오류:', error);
+      console.error('Error saving data:', error);
     }
   };
 
-  const toggleModal = () => {
-    setIngredients({
-      위스키: '0ml',
-      레몬주스: '0ml',
-      자몽주스: '0ml',
-      라임주스: '0ml',
-    });
-    setRecipeTitle(''); // 레시피 제목 초기화
-    setModalVisible(!isModalVisible);
-  };
-
-  const addIngredient = (ingredient, amount) => {
-    setIngredients({...ingredients, [ingredient]: amount});
-  };
-
-  const saveRecipe = () => {
-    const newRecipe = {
-      title: recipeTitle, // 레시피 제목
-      //description: recipeDescription, // 레시피 설명
-      ...ingredients,
-    };
-    const updatedRecipes = [...recipeList, newRecipe];
-    setRecipeList(updatedRecipes);
-    saveRecipesToStorage(updatedRecipes);
-    setModalVisible(false);
-  };
-
-  const deleteRecipe = index => {
-    Alert.alert(
-      '레시피 삭제',
-      '선택한 레시피를 삭제하시겠습니까?',
-      [
-        {
-          text: '취소',
-          style: 'cancel',
-        },
-        {
-          text: '확인',
-          onPress: () => {
-            const updatedRecipes = [...recipeList];
-            updatedRecipes.splice(index, 1); // 선택한 레시피 삭제
-            setRecipeList(updatedRecipes);
-            saveRecipesToStorage(updatedRecipes);
-          },
-        },
-      ],
-      {cancelable: false},
-    );
-  };
   return (
     <View style={styles.container}>
-      <Modal visible={isModalVisible} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <ScrollView style={{marginTop: 130}}>
-            <Text style={styles.recipeTitleLabel}>레시피 제목:</Text>
-            <TextInput
-              style={styles.recipeTitleInput}
-              value={recipeTitle}
-              onChangeText={text => setRecipeTitle(text)}
-              placeholder="레시피 제목을 입력하세요"
-            />
-            <View style={styles.pickerContainer}>
-              <Text style={styles.pickerLabel}>위스키 :</Text>
-              <Picker
-                selectedValue={ingredients.위스키}
-                onValueChange={itemValue => addIngredient('위스키', itemValue)}
-                style={styles.picker}>
-                <Picker.Item label="0ml" value="0ml" />
-                <Picker.Item label="15ml" value="15ml" />
-                <Picker.Item label="30ml" value="30ml" />
-                <Picker.Item label="45ml" value="45ml" />
-                <Picker.Item label="60ml" value="60ml" />
-                <Picker.Item label="75ml" value="75ml" />
-                <Picker.Item label="90ml" value="90ml" />
-              </Picker>
-            </View>
-            <View style={styles.pickerContainer}>
-              <Text style={styles.pickerLabel}>레몬주스:</Text>
-              <Picker
-                selectedValue={ingredients.레몬주스}
-                onValueChange={itemValue =>
-                  addIngredient('레몬주스', itemValue)
-                }
-                style={styles.picker}>
-                <Picker.Item label="0ml" value="0ml" />
-                <Picker.Item label="15ml" value="15ml" />
-                <Picker.Item label="30ml" value="30ml" />
-                <Picker.Item label="45ml" value="45ml" />
-                <Picker.Item label="60ml" value="60ml" />
-                <Picker.Item label="75ml" value="75ml" />
-                <Picker.Item label="90ml" value="90ml" />
-              </Picker>
-            </View>
-            <View style={styles.pickerContainer}>
-              <Text style={styles.pickerLabel}>자몽주스:</Text>
-              <Picker
-                selectedValue={ingredients.자몽주스}
-                onValueChange={itemValue =>
-                  addIngredient('자몽주스', itemValue)
-                }
-                style={styles.picker}>
-                <Picker.Item label="0ml" value="0ml" />
-                <Picker.Item label="15ml" value="15ml" />
-                <Picker.Item label="30ml" value="30ml" />
-                <Picker.Item label="45ml" value="45ml" />
-                <Picker.Item label="60ml" value="60ml" />
-                <Picker.Item label="75ml" value="75ml" />
-                <Picker.Item label="90ml" value="90ml" />
-              </Picker>
-            </View>
-            <View style={styles.pickerContainer}>
-              <Text style={styles.pickerLabel}>라임주스:</Text>
-              <Picker
-                selectedValue={ingredients.라임주스}
-                onValueChange={itemValue =>
-                  addIngredient('라임주스', itemValue)
-                }
-                style={styles.picker}>
-                <Picker.Item label="0ml" value="0ml" />
-                <Picker.Item label="15ml" value="15ml" />
-                <Picker.Item label="30ml" value="30ml" />
-                <Picker.Item label="45ml" value="45ml" />
-                <Picker.Item label="60ml" value="60ml" />
-                <Picker.Item label="75ml" value="75ml" />
-                <Picker.Item label="90ml" value="90ml" />
-              </Picker>
-            </View>
-            {/* <Text style={styles.recipeDescriptionLabel}>레시피 설명:</Text>
-            <TextInput
-              style={styles.recipeDescriptionInput}
-              value={recipeDescription}
-              onChangeText={(text) => setRecipeDescription(text)}
-              placeholder="레시피 설명을 입력하세요"
-            /> */}
-            <Button title="재료 저장" onPress={saveRecipe} />
-            <Button title="닫기" onPress={toggleModal} />
-          </ScrollView>
+      <Text style={styles.recipeListTitle}>Saved Recipes:</Text>
+      <View>
+        {recipeList.map((recipe, index) => (
+          <Text key={index} style={styles.recipeItem}>
+            {`Recipe ${index + 1}: Rum - ${recipe.rum}, Gin - ${
+              recipe.gin
+            }, Beer - ${recipe.beer}, Juice - ${recipe.juice}`}
+          </Text>
+        ))}
+      </View>
+      <Button title="추가" onPress={toggleModal} />
+
+      <Modal visible={isModalVisible} animationType="slide">
+        <View style={styles.modalContent}>
+          <Text>럼:</Text>
+          <Picker
+            selectedValue={rumType}
+            onValueChange={value => setRumType(value)}>
+            <Picker.Item label="선택하세요" value="" />
+            <Picker.Item label="화이트 럼" value="화이트 럼" />
+            <Picker.Item label="골드 럼" value="골드 럼" />
+            {/* 다른 럼 종류 추가 */}
+          </Picker>
+          <Picker
+            selectedValue={rumAmount}
+            onValueChange={value => setRumAmount(value)}>
+            <Picker.Item label="용량 선택" value="" />
+            <Picker.Item label="30ml" value="30ml" />
+            <Picker.Item label="60ml" value="60ml" />
+            {/* 다른 럼 용량 추가 */}
+          </Picker>
+
+          <Text>진:</Text>
+          <Picker
+            selectedValue={ginType}
+            onValueChange={value => setGinType(value)}>
+            <Picker.Item label="선택하세요" value="" />
+            <Picker.Item label="진" value="진" />
+            <Picker.Item label="핸드릭스" value="핸드릭스" />
+            {/* 다른 진 종류 추가 */}
+          </Picker>
+          <Picker
+            selectedValue={ginAmount}
+            onValueChange={value => setGinAmount(value)}>
+            <Picker.Item label="용량 선택" value="" />
+            <Picker.Item label="30ml" value="30ml" />
+            <Picker.Item label="60ml" value="60ml" />
+            {/* 다른 진 용량 추가 */}
+          </Picker>
+
+          <Text>맥주:</Text>
+          <Picker
+            selectedValue={beerType}
+            onValueChange={value => setBeerType(value)}>
+            <Picker.Item label="선택하세요" value="" />
+            <Picker.Item label="카스" value="카스" />
+            <Picker.Item label="테라" value="테라" />
+            {/* 다른 맥주 종류 추가 */}
+          </Picker>
+          <Picker
+            selectedValue={beerAmount}
+            onValueChange={value => setBeerAmount(value)}>
+            <Picker.Item label="용량 선택" value="" />
+            <Picker.Item label="330ml" value="330ml" />
+            <Picker.Item label="500ml" value="500ml" />
+            {/* 다른 맥주 용량 추가 */}
+          </Picker>
+
+          <Text>주스:</Text>
+          <Picker
+            selectedValue={juiceType}
+            onValueChange={value => setJuiceType(value)}>
+            <Picker.Item label="선택하세요" value="" />
+            <Picker.Item label="오렌지 주스" value="오렌지 주스" />
+            <Picker.Item label="파인애플 주스" value="파인애플 주스" />
+            {/* 다른 주스 종류 추가 */}
+          </Picker>
+          <Picker
+            selectedValue={juiceAmount}
+            onValueChange={value => setJuiceAmount(value)}>
+            <Picker.Item label="용량 선택" value="" />
+            <Picker.Item label="100ml" value="100ml" />
+            <Picker.Item label="200ml" value="200ml" />
+            {/* 다른 주스 용량 추가 */}
+          </Picker>
+
+          {/* Similar Picker components for Gin, Beer, and Juice */}
+
+          <Button title="Add Recipe" onPress={saveRecipe} />
+          <Button title="Cancel" onPress={toggleModal} />
         </View>
       </Modal>
-
-      <ScrollView>
-        {recipeList.map((recipe, index) => (
-          <View key={index} style={styles.recipeItem}>
-            {/* 삭제 버튼 */}
-            <View style={styles.btnContainer}>
-              <TouchableOpacity
-                onPress={() => deleteRecipe(index)}
-                style={styles.deleteButton}>
-                <Text style={styles.deleteButtonText}>삭제</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.makeButton}>
-                <Text style={styles.deleteButtonText}>제조</Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* 레시피 제목 */}
-            <Text style={styles.recipeTitle}>제목: {recipe.title}</Text>
-
-            {/* 레시피 용량 */}
-            <View style={styles.recipeContent}>
-              {/* <Text style={styles.recipeSubtitle}>용량:</Text> */}
-              {Object.keys(recipe).map(ingredient => {
-                if (ingredient !== 'title' && recipe[ingredient] !== '0ml') {
-                  return (
-                    <Text key={ingredient} style={styles.recipeTxt}>
-                      {`${ingredient}: ${recipe[ingredient]}`}
-                    </Text>
-                  );
-                } else {
-                  return null;
-                }
-              })}
-            </View>
-          </View>
-        ))}
-      </ScrollView>
-
-      {/*레시피추가 버튼*/}
-      <TouchableOpacity style={styles.addBtn} onPress={toggleModal}>
-        <Text style={styles.addBtnTxt}>레시피 추가</Text>
-      </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
-    backgroundColor: 'white',
+    padding: 20,
   },
-  addBtn: {
-    backgroundColor: 'lightblue',
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    width: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  addBtnTxt: {color: 'white'},
-  btnContainer: {
-    flexDirection: 'row',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  pickerContainer: {
-    //pickerLabel: + 용량선택 드롭다운
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-  },
-  pickerLabel: {
-    //위스키:, 레몬주스: ,등등
-    marginRight: 10,
-    fontSize: 20,
-  },
-  picker: {
-    width: 150,
-    height: 40,
-  },
-  recipeTitle: {
-    //제목:
+  recipeListTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginVertical: 10,
-  },
-  recipeTxt: {
-    fontSize: 18,
-    marginTop: 5,
-  },
-  recipeContent: {
-    marginLeft: 20,
+    marginTop: 20,
   },
   recipeItem: {
-    alignItems: 'center',
-    marginVertical: 10,
+    fontSize: 16,
+    marginBottom: 10,
   },
-  recipeSubtitle: {},
-  deleteButton: {
-    backgroundColor: 'red',
-    padding: 5,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  makeButton: {
-    backgroundColor: 'blue',
-    padding: 5,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  deleteButtonText: {
-    color: 'white',
-  },
-  recipeTitleLabel: {
-    //모달창 레시피제목:
-    fontSize: 20,
-    marginVertical: 10,
-  },
-  recipeTitleInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    height: 40,
-    paddingLeft: 10,
-    marginBottom: 20,
+  modalContent: {
+    width: '80%', // 모달의 너비를 조절할 수 있습니다.
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignSelf: 'center',
   },
 });
+
+export default CocktailRecipeScreen;
