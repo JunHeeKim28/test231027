@@ -17,6 +17,8 @@ import ReviewScreen from './src/screens/ReviewScreen';
 import ProfileEditScreen from './src/screens/ProfileEditScreen';
 import DeviceEditScreen from './src/screens/DeviceEditScreen';
 import PopularScreen from './src/screens/PopularScreen';
+import MakeScreen from './src/screens/MakeScreen';
+import GPTScreen from './src/screens/GPTScreen';
 
 const Stack = createStackNavigator();
 
@@ -102,6 +104,16 @@ function App() {
           name="Popular"
           component={PopularScreen}
           options={{headerTitle: '실시간 인기 칵테일'}}
+        />
+        <Stack.Screen
+          name="Make"
+          component={MakeScreen}
+          options={{headerTitle: '칵테일 제조'}}
+        />
+        <Stack.Screen
+          name="GPT"
+          component={GPTScreen}
+          options={{headerTitle: '챗봇으로 제조하기'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

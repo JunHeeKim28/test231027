@@ -43,10 +43,14 @@ const MainScreen = () => {
   const goToPopularScreen = () => {
     navigation.navigate('Popular');
   };
+  const goToMakeScreen = () => {
+    navigation.navigate('Make');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
+          onPress={goToMakeScreen}
           style={[styles.button, {width: buttonSize, height: buttonSize + 10}]}>
           <View style={{flexDirection: 'column', alignItems: 'center'}}>
             <Image
