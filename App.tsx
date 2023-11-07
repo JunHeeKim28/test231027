@@ -12,6 +12,11 @@ import FindIDScreen from './src/screens/FindIDScreen';
 import FindPWScreen from './src/screens/FindPWScreen';
 import InfoScreen from './src/screens/InfoScreen';
 import FavoritesScreen from './src/screens/FavoritesScreen';
+import SurveyScreen from './src/screens/SurveyScreen';
+import ReviewScreen from './src/screens/ReviewScreen';
+import ProfileEditScreen from './src/screens/ProfileEditScreen';
+import DeviceEditScreen from './src/screens/DeviceEditScreen';
+import PopularScreen from './src/screens/PopularScreen';
 
 const Stack = createStackNavigator();
 
@@ -72,6 +77,31 @@ function App() {
           name="Favorites"
           component={FavoritesScreen}
           options={{headerTitle: '즐겨찾기'}}
+        />
+        <Stack.Screen
+          name="Survey"
+          component={SurveyScreen}
+          options={{headerTitle: '칵테일 만족도 조사'}}
+        />
+        <Stack.Screen
+          name="Review"
+          component={ReviewScreen}
+          options={{headerTitle: '칵테일 리뷰'}}
+        />
+        <Stack.Screen
+          name="ProfileEdit"
+          component={ProfileEditScreen}
+          options={{headerTitle: '내 정보 수정하기'}}
+        />
+        <Stack.Screen
+          name="DeviceEdit"
+          component={DeviceEditScreen}
+          options={{headerTitle: '기기 정보 수정하기'}}
+        />
+        <Stack.Screen
+          name="Popular"
+          component={PopularScreen}
+          options={{headerTitle: '실시간 인기 칵테일'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

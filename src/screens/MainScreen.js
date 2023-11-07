@@ -34,6 +34,15 @@ const MainScreen = () => {
   const goToInfoScreen = () => {
     navigation.navigate('Info');
   };
+  const goToSurveyScreen = () => {
+    navigation.navigate('Survey');
+  };
+  const goToReviewScreen = () => {
+    navigation.navigate('Review');
+  };
+  const goToPopularScreen = () => {
+    navigation.navigate('Popular');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
@@ -74,6 +83,7 @@ const MainScreen = () => {
       </View>
 
       <TouchableOpacity
+        onPress={goToPopularScreen}
         style={[
           styles.button,
           {width: buttonSize * 2, height: buttonSize + 10},
@@ -88,7 +98,8 @@ const MainScreen = () => {
           <Text style={styles.buttonText}>기기등록</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, {width: buttonSize, height: buttonHeight}]}>
+          style={[styles.button, {width: buttonSize, height: buttonHeight}]}
+          onPress={goToSurveyScreen}>
           <Text style={styles.buttonText}>칵테일 만족도 조사</Text>
         </TouchableOpacity>
       </View>
@@ -100,7 +111,8 @@ const MainScreen = () => {
           <Text style={styles.buttonText}>칵테일 레시피</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.button, {width: buttonSize, height: buttonHeight}]}>
+          style={[styles.button, {width: buttonSize, height: buttonHeight}]}
+          onPress={goToReviewScreen}>
           <Text style={styles.buttonText}>칵테일 리뷰</Text>
         </TouchableOpacity>
       </View>

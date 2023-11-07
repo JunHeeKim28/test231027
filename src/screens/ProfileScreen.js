@@ -7,6 +7,21 @@ import axios from 'axios';
 const ProfileScreen = () => {
   const navigation = useNavigation();
 
+  const goToReviewScreen = () => {
+    navigation.navigate('Review');
+  };
+  const goToFavoritesScreen = () => {
+    navigation.navigate('Favorites');
+  };
+  const goToListScreen = () => {
+    navigation.navigate('List');
+  };
+  const goToProfileEditScreen = () => {
+    navigation.navigate('ProfileEdit');
+  };
+  const goToDeviceEditScreen = () => {
+    navigation.navigate('DeviceEdit');
+  };
   const handleLogout = async () => {
     Alert.alert(
       '로그아웃',
@@ -98,10 +113,10 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <Text style={styles.txt}>내 정보 수정하기!</Text>
+      <TouchableOpacity onPress={goToProfileEditScreen}>
+        <Text style={styles.txt}>내 정보 수정하기</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={goToDeviceEditScreen}>
         <Text style={styles.txt}>기기 등록 수정하기</Text>
       </TouchableOpacity>
       <View
@@ -111,13 +126,13 @@ const ProfileScreen = () => {
           marginHorizontal: 10,
         }}
       />
-      <TouchableOpacity>
+      <TouchableOpacity onPress={goToListScreen}>
         <Text style={styles.txt}>이용 내역</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={goToFavoritesScreen}>
         <Text style={styles.txt}>즐겨찾기</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={goToReviewScreen}>
         <Text style={styles.txt}>칵테일 리뷰</Text>
       </TouchableOpacity>
       <View
