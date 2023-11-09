@@ -18,7 +18,7 @@ function FindIDScreen() {
   //비밀번호 찾기 부분
   const findPW = () => {
     axios
-      .post('https://ceprj.gachon.ac.kr:60005/user/reset-password', {
+      .post('http://ceprj.gachon.ac.kr:60005/user/reset-password', {
         username,
         email,
       })

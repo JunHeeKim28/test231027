@@ -12,20 +12,21 @@ import {useState} from 'react';
 import axios from 'axios';
 
 function FindIDScreen() {
-  const [nickname, setNickname] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
 
   // 서버로 요청을 보내 아이디를 찾는 부분
   const findID = () => {
     axios
-      .post('https://ceprj.gachon.ac.kr:60005/user/find-id', {
-        nickname,
+      .post('http://ceprj.gachon.ac.kr:60005/user/find-id', {
+        phone,
         email,
       })
       .then(response => {
         const foundID = response.data; // 서버에서 반환한 아이디
+        console.log(foundID);
         if (foundID) {
-          Alert.alert('아이디 찾기', `찾은 아이디: ${foundID}`);
+          Alert.alert('아이디 찾기', `찾은 아이디: ${foundID.userId}`);
         } else {
           Alert.alert('아이디 찾기', '해당 정보로 아이디를 찾을 수 없습니다.');
         }
@@ -39,13 +40,14 @@ function FindIDScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.container1}>
-        <Text style={styles.text}>닉네임</Text>
+        <Text style={styles.text}>전화번호</Text>
         <TextInput
           style={styles.input}
-          value={nickname}
-          onChangeText={text => setNickname(text)}
-          placeholder="닉네임"
+          value={phone}
+          onChangeText={text => setPhone(text)}
+          placeholder="전화번호"
           placeholderTextColor="gray"
+          keyboardType="numeric"
         />
       </View>
       <View style={styles.container2}>

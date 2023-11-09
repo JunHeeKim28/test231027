@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-//import FavoritesScreen from './FavoritesScreen';
 import {useNavigation} from '@react-navigation/native';
 import {useFavorites} from './FavoritesContext';
 
@@ -27,7 +26,6 @@ const ListScreen = () => {
       // 다른 아이템을 선택하면 해당 아이템 저장
       setSelectedItem(item);
     }
-    //setSelectedItem(item);
   };
 
   const makeCocktail = () => {};
