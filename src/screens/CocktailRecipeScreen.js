@@ -15,19 +15,19 @@ import axios from 'axios';
 
 const CocktailRecipeScreen = () => {
   const [recipeTitle, setRecipeTitle] = useState('');
-  const [rumType, setRumType] = useState('');
-  const [rumAmount, setRumAmount] = useState('');
-  const [ginType, setGinType] = useState('');
-  const [ginAmount, setGinAmount] = useState('');
-  const [beerType, setBeerType] = useState('');
-  const [beerAmount, setBeerAmount] = useState('');
-  const [juiceType, setJuiceType] = useState('');
-  const [juiceAmount, setJuiceAmount] = useState('');
+  const [num1, setNum1] = useState('');
+  const [vol1, setVol1] = useState('');
+  const [num2, setNum2] = useState('');
+  const [vol2, setVol2] = useState('');
+  const [num3, setNum3] = useState('');
+  const [vol3, setVol3] = useState('');
+  const [num4, setNum4] = useState('');
+  const [vol4, setVol4] = useState('');
   const [recipeList, setRecipeList] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isSave, setIsSave] = useState(false);
   const STORAGE_KEY = 'cocktailRecipes';
-  const UserID = 'KimJH128';
+
   useEffect(() => {
     loadRecipesFromStorage();
   }, []);
@@ -40,14 +40,14 @@ const CocktailRecipeScreen = () => {
   const saveRecipe = async () => {
     if (
       recipeTitle === '' ||
-      rumType === '' ||
-      rumAmount === '' ||
-      ginType === '' ||
-      ginAmount === '' ||
-      beerType === '' ||
-      beerAmount === '' ||
-      juiceType === '' ||
-      juiceAmount === ''
+      num1 === '' ||
+      vol1 === '' ||
+      num2 === '' ||
+      vol2 === '' ||
+      num3 === '' ||
+      vol3 === '' ||
+      num4 === '' ||
+      vol4 === ''
     ) {
       Alert.alert('저장 안됨', '항목을 다 채워주세요.');
       return;
@@ -55,14 +55,14 @@ const CocktailRecipeScreen = () => {
 
     const newRecipe = {
       title: recipeTitle,
-      rum: rumType,
-      rumAmount: rumAmount,
-      gin: ginType,
-      ginAmount: ginAmount,
-      beer: beerType,
-      beerAmount: beerAmount,
-      juice: juiceType,
-      juiceAmount: juiceAmount,
+      number1: num1,
+      vol1: vol1,
+      number2: num2,
+      vol2: vol2,
+      number3: num3,
+      vol3: vol3,
+      number4: num4,
+      vol4: vol4,
     };
     axios
       .post('http://ceprj.gachon.ac.kr:60005/recipes', newRecipe)
@@ -124,14 +124,14 @@ const CocktailRecipeScreen = () => {
     const {
       UserID,
       title,
-      rum,
-      rumAmount,
-      gin,
-      ginAmount,
-      beer,
-      beerAmount,
-      juice,
-      juiceAmount,
+      number1,
+      vol1,
+      number2,
+      vol2,
+      number3,
+      vol3,
+      number4,
+      vol4,
     } = recipe;
 
     // 함수를 통해 "ml"을 제거하고 숫자만 추출, 10진수
@@ -141,10 +141,10 @@ const CocktailRecipeScreen = () => {
     const recipeData = {
       UserID: 'idonknow',
       cotail_name: title,
-      first: extractNumber(rumAmount),
-      second: extractNumber(ginAmount),
-      third: extractNumber(beerAmount),
-      fourth: extractNumber(juiceAmount),
+      first: extractNumber(vol1),
+      second: extractNumber(vol2),
+      third: extractNumber(vol3),
+      fourth: extractNumber(vol4),
     };
     // 클라이언트 측에서 데이터를 로그에 출력
     console.log('Sending data to server:', recipeData);
@@ -152,10 +152,10 @@ const CocktailRecipeScreen = () => {
     axios
       .post(
         `http://ceprjmaker.iptime.org:10000/make_cocktail/${UserID}/${title}/${extractNumber(
-          rumAmount,
-        )}/${extractNumber(ginAmount)}/${extractNumber(
-          beerAmount,
-        )}/${extractNumber(juiceAmount)}`,
+          vol1,
+        )}/${extractNumber(vol2)}/${extractNumber(vol3)}/${extractNumber(
+          vol4,
+        )}`,
         recipeData,
       )
       .then(response => {
@@ -180,11 +180,11 @@ const CocktailRecipeScreen = () => {
         {recipeList.map((recipe, index) => (
           <View key={index} style={styles.recipeItemContainer}>
             <Text style={styles.recipeItem}>
-              {` ${recipe.title || 'Untitled Recipe'}:  ${recipe.rum} ${
-                recipe.rumAmount
-              }, ${recipe.gin} ${recipe.ginAmount}, ${recipe.beer} ${
-                recipe.beerAmount
-              }, ${recipe.juice} ${recipe.juiceAmount}`}
+              {` ${recipe.title || 'Untitled Recipe'}:  ${recipe.number1} ${
+                recipe.vol1
+              }, ${recipe.number2} ${recipe.vol2}, ${recipe.number3} ${
+                recipe.vol3
+              }, ${recipe.number4} ${recipe.vol4}`}
             </Text>
             <View style={styles.recipeItemBtns}>
               <TouchableOpacity
@@ -211,17 +211,128 @@ const CocktailRecipeScreen = () => {
             value={recipeTitle}
             onChangeText={text => setRecipeTitle(text)}
           />
-          <Text>럼:</Text>
-          <Picker
-            selectedValue={rumType}
-            onValueChange={value => setRumType(value)}>
+          <Text>1번:</Text>
+          <Picker selectedValue={num1} onValueChange={value => setNum1(value)}>
             <Picker.Item label="선택하세요" value="" />
-            <Picker.Item label="화이트 럼" value="화이트 럼" />
-            <Picker.Item label="골드 럼" value="골드 럼" />
+            <Picker.Item
+              label="Almond Flavored Liqueur"
+              value="Almond Flavored Liqueur"
+            />
+            <Picker.Item label="Anejo Cuatro Rum" value="Anejo Cuatro Rum" />
+            <Picker.Item label="Apple Cider" value="Apple Cider" />
+            <Picker.Item label="Apple Juice" value="Apple Juice" />
+            <Picker.Item label="Apricot Brandy" value="Apricot Brandy" />
+            <Picker.Item label="Banana Liqueur" value="Banana Liqueur" />
+            <Picker.Item
+              label="Black Raspberry Liqueur"
+              value="Black Raspberry Liqueur"
+            />
+            <Picker.Item label="Black Rum" value="Black Rum" />
+            <Picker.Item label="Blanco Tequila" value="Blanco Tequila" />
+            <Picker.Item
+              label="Blood Orange Juice"
+              value="Blood Orange Juice"
+            />
+            <Picker.Item label="Blood Orange Soda" value="Blood Orange Soda" />
+            <Picker.Item label="Blue Curacao" value="Blue Curacao" />
+            <Picker.Item
+              label="Blue Curacao Liqueur"
+              value="Blue Curacao Liqueur"
+            />
+            <Picker.Item label="Bourbon Whiskey" value="Bourbon Whiskey" />
+            <Picker.Item label="Canadian Whiskey" value="Canadian Whiskey" />
+            <Picker.Item label="Champagne" value="Champagne" />
+            <Picker.Item
+              label="Chartreuse Green Liqueur"
+              value="Chartreuse Green Liqueur"
+            />
+            <Picker.Item label="Cherry Brandy" value="Cherry Brandy" />
+            <Picker.Item label="Citrus Syrup" value="Citrus Syrup" />
+            <Picker.Item label="Citrus Vodka" value="Citrus Vodka" />
+            <Picker.Item label="Club Soda" value="Club Soda" />
+            <Picker.Item label="Coconut Rum" value="Coconut Rum" />
+            <Picker.Item label="Coconut Water" value="Coconut Water" />
+            <Picker.Item
+              label="Coffee Flavored Liqueur"
+              value="Coffee Flavored Liqueur"
+            />
+            <Picker.Item label="Coffee Liqueur  " value="Coffee Liqueur  " />
+            <Picker.Item label="Cola" value="Cola" />
+            <Picker.Item label="Cranberry Juice" value="Cranberry Juice" />
+            <Picker.Item label="Cream of Coconut" value="Cream of Coconut" />
+            <Picker.Item label="Diet Cola" value="Diet Cola" />
+            <Picker.Item label="Dry Gin" value="Dry Gin" />
+            <Picker.Item label="Dry Vermouth" value="Dry Vermouth" />
+            <Picker.Item
+              label="Elderflower Liqueur"
+              value="Elderflower Liqueur"
+            />
+            <Picker.Item label="Espresso" value="Espresso" />
+            <Picker.Item label="Gin" value="Gin" />
+            <Picker.Item label="Gin Based Liqueur" value="Gin Based Liqueur" />
+            <Picker.Item label="Ginger Ale" value="Ginger Ale" />
+            <Picker.Item label="Ginger Beer" value="Ginger Beer" />
+            <Picker.Item
+              label="Ginger Simple Syrup"
+              value="Ginger Simple Syrup"
+            />
+            <Picker.Item label="Gold Rum" value="Gold Rum" />
+            <Picker.Item label="Grand Marnier" value="Grand Marnier" />
+            <Picker.Item label="Grapefruit Juice" value="Grapefruit Juice" />
+            <Picker.Item label="Grenadine Syrup" value="Grenadine Syrup" />
+            <Picker.Item label="Honey" value="Honey" />
+            <Picker.Item
+              label="Honey Ginger Syrup"
+              value="Honey Ginger Syrup"
+            />
+            <Picker.Item label="Honey Syrup" value="Honey Syrup" />
+            <Picker.Item label="Irish Whiskey" value="Irish Whiskey" />
+            <Picker.Item label="Jamaican Rum" value="Jamaican Rum" />
+            <Picker.Item
+              label="Lemon Flavored Liqueur"
+              value="Lemon Flavored Liqueur"
+            />
+            <Picker.Item label="Lemon Juice" value="Lemon Juice" />
+            <Picker.Item label="Lime Flavored Rum" value="Lime Flavored Rum" />
+            <Picker.Item label="Lime Juice" value="Lime Juice" />
+            <Picker.Item
+              label="Limon Flavored Rum"
+              value="Limon Flavored Rum"
+            />
+            <Picker.Item label="Orange Juice" value="Orange Juice" />
+            <Picker.Item label="Original Vodka" value="Original Vodka" />
+            <Picker.Item
+              label="Peach Flavored Schnapps"
+              value="Peach Flavored Schnapps"
+            />
+            <Picker.Item label="Pineapple Juice" value="Pineapple Juice" />
+            <Picker.Item
+              label="Raspberry Flavored Liqueur"
+              value="Raspberry Flavored Liqueur"
+            />
+            <Picker.Item label="Red Burgundy Wine" value="Red Burgundy Wine" />
+            <Picker.Item label="Rum" value="Rum" />
+            <Picker.Item label="Rum Cream Liqueur" value="Rum Cream Liqueur" />
+            <Picker.Item label="Scotch Whiskey" value="Scotch Whiskey" />
+            <Picker.Item label="Simple Syrup" value="Simple Syrup" />
+            <Picker.Item label="Soda Water" value="Soda Water" />
+            <Picker.Item label="Sour Mix" value="Sour Mix" />
+            <Picker.Item label="Strawberry Syrup" value="Strawberry Syrup" />
+            <Picker.Item label="Sweet Vermouth" value="Sweet Vermouth" />
+            <Picker.Item label="Tennessee Whiskey" value="Tennessee Whiskey" />
+            <Picker.Item label="Toffee Syrup" value="Toffee Syrup" />
+            <Picker.Item label="Tomato Juice" value="Tomato Juice" />
+            <Picker.Item label="Tonic Water" value="Tonic Water" />
+            <Picker.Item label="Triple Sec " value="Triple Sec " />
+            <Picker.Item label="Vermouth" value="Vermouth" />
+            <Picker.Item label="Vodka" value="Vodka" />
+            <Picker.Item
+              label="Whiskey Fruit Spice Liqueur"
+              value="Whiskey Fruit Spice Liqueur"
+            />
+            <Picker.Item label="White Rum" value="White Rum" />
           </Picker>
-          <Picker
-            selectedValue={rumAmount}
-            onValueChange={value => setRumAmount(value)}>
+          <Picker selectedValue={vol1} onValueChange={value => setVol1(value)}>
             <Picker.Item label="용량 선택" value="" />
             <Picker.Item label="0ml" value="0" />
             <Picker.Item label="15ml" value="15" />
@@ -232,17 +343,128 @@ const CocktailRecipeScreen = () => {
             <Picker.Item label="90ml" value="90" />
           </Picker>
 
-          <Text>진:</Text>
-          <Picker
-            selectedValue={ginType}
-            onValueChange={value => setGinType(value)}>
+          <Text>2번:</Text>
+          <Picker selectedValue={num3} onValueChange={value => setNum2(value)}>
             <Picker.Item label="선택하세요" value="" />
-            <Picker.Item label="진" value="진" />
-            <Picker.Item label="드라이 진" value="드라이 진" />
+            <Picker.Item
+              label="Almond Flavored Liqueur"
+              value="Almond Flavored Liqueur"
+            />
+            <Picker.Item label="Anejo Cuatro Rum" value="Anejo Cuatro Rum" />
+            <Picker.Item label="Apple Cider" value="Apple Cider" />
+            <Picker.Item label="Apple Juice" value="Apple Juice" />
+            <Picker.Item label="Apricot Brandy" value="Apricot Brandy" />
+            <Picker.Item label="Banana Liqueur" value="Banana Liqueur" />
+            <Picker.Item
+              label="Black Raspberry Liqueur"
+              value="Black Raspberry Liqueur"
+            />
+            <Picker.Item label="Black Rum" value="Black Rum" />
+            <Picker.Item label="Blanco Tequila" value="Blanco Tequila" />
+            <Picker.Item
+              label="Blood Orange Juice"
+              value="Blood Orange Juice"
+            />
+            <Picker.Item label="Blood Orange Soda" value="Blood Orange Soda" />
+            <Picker.Item label="Blue Curacao" value="Blue Curacao" />
+            <Picker.Item
+              label="Blue Curacao Liqueur"
+              value="Blue Curacao Liqueur"
+            />
+            <Picker.Item label="Bourbon Whiskey" value="Bourbon Whiskey" />
+            <Picker.Item label="Canadian Whiskey" value="Canadian Whiskey" />
+            <Picker.Item label="Champagne" value="Champagne" />
+            <Picker.Item
+              label="Chartreuse Green Liqueur"
+              value="Chartreuse Green Liqueur"
+            />
+            <Picker.Item label="Cherry Brandy" value="Cherry Brandy" />
+            <Picker.Item label="Citrus Syrup" value="Citrus Syrup" />
+            <Picker.Item label="Citrus Vodka" value="Citrus Vodka" />
+            <Picker.Item label="Club Soda" value="Club Soda" />
+            <Picker.Item label="Coconut Rum" value="Coconut Rum" />
+            <Picker.Item label="Coconut Water" value="Coconut Water" />
+            <Picker.Item
+              label="Coffee Flavored Liqueur"
+              value="Coffee Flavored Liqueur"
+            />
+            <Picker.Item label="Coffee Liqueur  " value="Coffee Liqueur  " />
+            <Picker.Item label="Cola" value="Cola" />
+            <Picker.Item label="Cranberry Juice" value="Cranberry Juice" />
+            <Picker.Item label="Cream of Coconut" value="Cream of Coconut" />
+            <Picker.Item label="Diet Cola" value="Diet Cola" />
+            <Picker.Item label="Dry Gin" value="Dry Gin" />
+            <Picker.Item label="Dry Vermouth" value="Dry Vermouth" />
+            <Picker.Item
+              label="Elderflower Liqueur"
+              value="Elderflower Liqueur"
+            />
+            <Picker.Item label="Espresso" value="Espresso" />
+            <Picker.Item label="Gin" value="Gin" />
+            <Picker.Item label="Gin Based Liqueur" value="Gin Based Liqueur" />
+            <Picker.Item label="Ginger Ale" value="Ginger Ale" />
+            <Picker.Item label="Ginger Beer" value="Ginger Beer" />
+            <Picker.Item
+              label="Ginger Simple Syrup"
+              value="Ginger Simple Syrup"
+            />
+            <Picker.Item label="Gold Rum" value="Gold Rum" />
+            <Picker.Item label="Grand Marnier" value="Grand Marnier" />
+            <Picker.Item label="Grapefruit Juice" value="Grapefruit Juice" />
+            <Picker.Item label="Grenadine Syrup" value="Grenadine Syrup" />
+            <Picker.Item label="Honey" value="Honey" />
+            <Picker.Item
+              label="Honey Ginger Syrup"
+              value="Honey Ginger Syrup"
+            />
+            <Picker.Item label="Honey Syrup" value="Honey Syrup" />
+            <Picker.Item label="Irish Whiskey" value="Irish Whiskey" />
+            <Picker.Item label="Jamaican Rum" value="Jamaican Rum" />
+            <Picker.Item
+              label="Lemon Flavored Liqueur"
+              value="Lemon Flavored Liqueur"
+            />
+            <Picker.Item label="Lemon Juice" value="Lemon Juice" />
+            <Picker.Item label="Lime Flavored Rum" value="Lime Flavored Rum" />
+            <Picker.Item label="Lime Juice" value="Lime Juice" />
+            <Picker.Item
+              label="Limon Flavored Rum"
+              value="Limon Flavored Rum"
+            />
+            <Picker.Item label="Orange Juice" value="Orange Juice" />
+            <Picker.Item label="Original Vodka" value="Original Vodka" />
+            <Picker.Item
+              label="Peach Flavored Schnapps"
+              value="Peach Flavored Schnapps"
+            />
+            <Picker.Item label="Pineapple Juice" value="Pineapple Juice" />
+            <Picker.Item
+              label="Raspberry Flavored Liqueur"
+              value="Raspberry Flavored Liqueur"
+            />
+            <Picker.Item label="Red Burgundy Wine" value="Red Burgundy Wine" />
+            <Picker.Item label="Rum" value="Rum" />
+            <Picker.Item label="Rum Cream Liqueur" value="Rum Cream Liqueur" />
+            <Picker.Item label="Scotch Whiskey" value="Scotch Whiskey" />
+            <Picker.Item label="Simple Syrup" value="Simple Syrup" />
+            <Picker.Item label="Soda Water" value="Soda Water" />
+            <Picker.Item label="Sour Mix" value="Sour Mix" />
+            <Picker.Item label="Strawberry Syrup" value="Strawberry Syrup" />
+            <Picker.Item label="Sweet Vermouth" value="Sweet Vermouth" />
+            <Picker.Item label="Tennessee Whiskey" value="Tennessee Whiskey" />
+            <Picker.Item label="Toffee Syrup" value="Toffee Syrup" />
+            <Picker.Item label="Tomato Juice" value="Tomato Juice" />
+            <Picker.Item label="Tonic Water" value="Tonic Water" />
+            <Picker.Item label="Triple Sec " value="Triple Sec " />
+            <Picker.Item label="Vermouth" value="Vermouth" />
+            <Picker.Item label="Vodka" value="Vodka" />
+            <Picker.Item
+              label="Whiskey Fruit Spice Liqueur"
+              value="Whiskey Fruit Spice Liqueur"
+            />
+            <Picker.Item label="White Rum" value="White Rum" />
           </Picker>
-          <Picker
-            selectedValue={ginAmount}
-            onValueChange={value => setGinAmount(value)}>
+          <Picker selectedValue={vol2} onValueChange={value => setVol2(value)}>
             <Picker.Item label="용량 선택" value="" />
             <Picker.Item label="0ml" value="0" />
             <Picker.Item label="15ml" value="15" />
@@ -253,17 +475,128 @@ const CocktailRecipeScreen = () => {
             <Picker.Item label="90ml" value="90" />
           </Picker>
 
-          <Text>맥주:</Text>
-          <Picker
-            selectedValue={beerType}
-            onValueChange={value => setBeerType(value)}>
+          <Text>3번:</Text>
+          <Picker selectedValue={num3} onValueChange={value => setNum3(value)}>
             <Picker.Item label="선택하세요" value="" />
-            <Picker.Item label="카스" value="카스" />
-            <Picker.Item label="테라" value="테라" />
+            <Picker.Item
+              label="Almond Flavored Liqueur"
+              value="Almond Flavored Liqueur"
+            />
+            <Picker.Item label="Anejo Cuatro Rum" value="Anejo Cuatro Rum" />
+            <Picker.Item label="Apple Cider" value="Apple Cider" />
+            <Picker.Item label="Apple Juice" value="Apple Juice" />
+            <Picker.Item label="Apricot Brandy" value="Apricot Brandy" />
+            <Picker.Item label="Banana Liqueur" value="Banana Liqueur" />
+            <Picker.Item
+              label="Black Raspberry Liqueur"
+              value="Black Raspberry Liqueur"
+            />
+            <Picker.Item label="Black Rum" value="Black Rum" />
+            <Picker.Item label="Blanco Tequila" value="Blanco Tequila" />
+            <Picker.Item
+              label="Blood Orange Juice"
+              value="Blood Orange Juice"
+            />
+            <Picker.Item label="Blood Orange Soda" value="Blood Orange Soda" />
+            <Picker.Item label="Blue Curacao" value="Blue Curacao" />
+            <Picker.Item
+              label="Blue Curacao Liqueur"
+              value="Blue Curacao Liqueur"
+            />
+            <Picker.Item label="Bourbon Whiskey" value="Bourbon Whiskey" />
+            <Picker.Item label="Canadian Whiskey" value="Canadian Whiskey" />
+            <Picker.Item label="Champagne" value="Champagne" />
+            <Picker.Item
+              label="Chartreuse Green Liqueur"
+              value="Chartreuse Green Liqueur"
+            />
+            <Picker.Item label="Cherry Brandy" value="Cherry Brandy" />
+            <Picker.Item label="Citrus Syrup" value="Citrus Syrup" />
+            <Picker.Item label="Citrus Vodka" value="Citrus Vodka" />
+            <Picker.Item label="Club Soda" value="Club Soda" />
+            <Picker.Item label="Coconut Rum" value="Coconut Rum" />
+            <Picker.Item label="Coconut Water" value="Coconut Water" />
+            <Picker.Item
+              label="Coffee Flavored Liqueur"
+              value="Coffee Flavored Liqueur"
+            />
+            <Picker.Item label="Coffee Liqueur  " value="Coffee Liqueur  " />
+            <Picker.Item label="Cola" value="Cola" />
+            <Picker.Item label="Cranberry Juice" value="Cranberry Juice" />
+            <Picker.Item label="Cream of Coconut" value="Cream of Coconut" />
+            <Picker.Item label="Diet Cola" value="Diet Cola" />
+            <Picker.Item label="Dry Gin" value="Dry Gin" />
+            <Picker.Item label="Dry Vermouth" value="Dry Vermouth" />
+            <Picker.Item
+              label="Elderflower Liqueur"
+              value="Elderflower Liqueur"
+            />
+            <Picker.Item label="Espresso" value="Espresso" />
+            <Picker.Item label="Gin" value="Gin" />
+            <Picker.Item label="Gin Based Liqueur" value="Gin Based Liqueur" />
+            <Picker.Item label="Ginger Ale" value="Ginger Ale" />
+            <Picker.Item label="Ginger Beer" value="Ginger Beer" />
+            <Picker.Item
+              label="Ginger Simple Syrup"
+              value="Ginger Simple Syrup"
+            />
+            <Picker.Item label="Gold Rum" value="Gold Rum" />
+            <Picker.Item label="Grand Marnier" value="Grand Marnier" />
+            <Picker.Item label="Grapefruit Juice" value="Grapefruit Juice" />
+            <Picker.Item label="Grenadine Syrup" value="Grenadine Syrup" />
+            <Picker.Item label="Honey" value="Honey" />
+            <Picker.Item
+              label="Honey Ginger Syrup"
+              value="Honey Ginger Syrup"
+            />
+            <Picker.Item label="Honey Syrup" value="Honey Syrup" />
+            <Picker.Item label="Irish Whiskey" value="Irish Whiskey" />
+            <Picker.Item label="Jamaican Rum" value="Jamaican Rum" />
+            <Picker.Item
+              label="Lemon Flavored Liqueur"
+              value="Lemon Flavored Liqueur"
+            />
+            <Picker.Item label="Lemon Juice" value="Lemon Juice" />
+            <Picker.Item label="Lime Flavored Rum" value="Lime Flavored Rum" />
+            <Picker.Item label="Lime Juice" value="Lime Juice" />
+            <Picker.Item
+              label="Limon Flavored Rum"
+              value="Limon Flavored Rum"
+            />
+            <Picker.Item label="Orange Juice" value="Orange Juice" />
+            <Picker.Item label="Original Vodka" value="Original Vodka" />
+            <Picker.Item
+              label="Peach Flavored Schnapps"
+              value="Peach Flavored Schnapps"
+            />
+            <Picker.Item label="Pineapple Juice" value="Pineapple Juice" />
+            <Picker.Item
+              label="Raspberry Flavored Liqueur"
+              value="Raspberry Flavored Liqueur"
+            />
+            <Picker.Item label="Red Burgundy Wine" value="Red Burgundy Wine" />
+            <Picker.Item label="Rum" value="Rum" />
+            <Picker.Item label="Rum Cream Liqueur" value="Rum Cream Liqueur" />
+            <Picker.Item label="Scotch Whiskey" value="Scotch Whiskey" />
+            <Picker.Item label="Simple Syrup" value="Simple Syrup" />
+            <Picker.Item label="Soda Water" value="Soda Water" />
+            <Picker.Item label="Sour Mix" value="Sour Mix" />
+            <Picker.Item label="Strawberry Syrup" value="Strawberry Syrup" />
+            <Picker.Item label="Sweet Vermouth" value="Sweet Vermouth" />
+            <Picker.Item label="Tennessee Whiskey" value="Tennessee Whiskey" />
+            <Picker.Item label="Toffee Syrup" value="Toffee Syrup" />
+            <Picker.Item label="Tomato Juice" value="Tomato Juice" />
+            <Picker.Item label="Tonic Water" value="Tonic Water" />
+            <Picker.Item label="Triple Sec " value="Triple Sec " />
+            <Picker.Item label="Vermouth" value="Vermouth" />
+            <Picker.Item label="Vodka" value="Vodka" />
+            <Picker.Item
+              label="Whiskey Fruit Spice Liqueur"
+              value="Whiskey Fruit Spice Liqueur"
+            />
+            <Picker.Item label="White Rum" value="White Rum" />
           </Picker>
-          <Picker
-            selectedValue={beerAmount}
-            onValueChange={value => setBeerAmount(value)}>
+          <Picker selectedValue={vol3} onValueChange={value => setVol3(value)}>
             <Picker.Item label="용량 선택" value="" />
             <Picker.Item label="0ml" value="0" />
             <Picker.Item label="15ml" value="15" />
@@ -274,20 +607,128 @@ const CocktailRecipeScreen = () => {
             <Picker.Item label="90ml" value="90" />
           </Picker>
 
-          <Text>주스:</Text>
-          <Picker
-            selectedValue={juiceType}
-            onValueChange={value => setJuiceType(value)}>
+          <Text>4번:</Text>
+          <Picker selectedValue={num4} onValueChange={value => setNum4(value)}>
             <Picker.Item label="선택하세요" value="" />
-            <Picker.Item label="오렌지 주스" value="오렌지 주스" />
-            <Picker.Item label="파인애플 주스" value="파인애플 주스" />
-            <Picker.Item label="레몬 주스" value="레몬 주스" />
-            <Picker.Item label="자몽 주스" value="자몽 주스" />
-            <Picker.Item label="코코넛 주스" value="코코넛 주스" />
+            <Picker.Item
+              label="Almond Flavored Liqueur"
+              value="Almond Flavored Liqueur"
+            />
+            <Picker.Item label="Anejo Cuatro Rum" value="Anejo Cuatro Rum" />
+            <Picker.Item label="Apple Cider" value="Apple Cider" />
+            <Picker.Item label="Apple Juice" value="Apple Juice" />
+            <Picker.Item label="Apricot Brandy" value="Apricot Brandy" />
+            <Picker.Item label="Banana Liqueur" value="Banana Liqueur" />
+            <Picker.Item
+              label="Black Raspberry Liqueur"
+              value="Black Raspberry Liqueur"
+            />
+            <Picker.Item label="Black Rum" value="Black Rum" />
+            <Picker.Item label="Blanco Tequila" value="Blanco Tequila" />
+            <Picker.Item
+              label="Blood Orange Juice"
+              value="Blood Orange Juice"
+            />
+            <Picker.Item label="Blood Orange Soda" value="Blood Orange Soda" />
+            <Picker.Item label="Blue Curacao" value="Blue Curacao" />
+            <Picker.Item
+              label="Blue Curacao Liqueur"
+              value="Blue Curacao Liqueur"
+            />
+            <Picker.Item label="Bourbon Whiskey" value="Bourbon Whiskey" />
+            <Picker.Item label="Canadian Whiskey" value="Canadian Whiskey" />
+            <Picker.Item label="Champagne" value="Champagne" />
+            <Picker.Item
+              label="Chartreuse Green Liqueur"
+              value="Chartreuse Green Liqueur"
+            />
+            <Picker.Item label="Cherry Brandy" value="Cherry Brandy" />
+            <Picker.Item label="Citrus Syrup" value="Citrus Syrup" />
+            <Picker.Item label="Citrus Vodka" value="Citrus Vodka" />
+            <Picker.Item label="Club Soda" value="Club Soda" />
+            <Picker.Item label="Coconut Rum" value="Coconut Rum" />
+            <Picker.Item label="Coconut Water" value="Coconut Water" />
+            <Picker.Item
+              label="Coffee Flavored Liqueur"
+              value="Coffee Flavored Liqueur"
+            />
+            <Picker.Item label="Coffee Liqueur  " value="Coffee Liqueur  " />
+            <Picker.Item label="Cola" value="Cola" />
+            <Picker.Item label="Cranberry Juice" value="Cranberry Juice" />
+            <Picker.Item label="Cream of Coconut" value="Cream of Coconut" />
+            <Picker.Item label="Diet Cola" value="Diet Cola" />
+            <Picker.Item label="Dry Gin" value="Dry Gin" />
+            <Picker.Item label="Dry Vermouth" value="Dry Vermouth" />
+            <Picker.Item
+              label="Elderflower Liqueur"
+              value="Elderflower Liqueur"
+            />
+            <Picker.Item label="Espresso" value="Espresso" />
+            <Picker.Item label="Gin" value="Gin" />
+            <Picker.Item label="Gin Based Liqueur" value="Gin Based Liqueur" />
+            <Picker.Item label="Ginger Ale" value="Ginger Ale" />
+            <Picker.Item label="Ginger Beer" value="Ginger Beer" />
+            <Picker.Item
+              label="Ginger Simple Syrup"
+              value="Ginger Simple Syrup"
+            />
+            <Picker.Item label="Gold Rum" value="Gold Rum" />
+            <Picker.Item label="Grand Marnier" value="Grand Marnier" />
+            <Picker.Item label="Grapefruit Juice" value="Grapefruit Juice" />
+            <Picker.Item label="Grenadine Syrup" value="Grenadine Syrup" />
+            <Picker.Item label="Honey" value="Honey" />
+            <Picker.Item
+              label="Honey Ginger Syrup"
+              value="Honey Ginger Syrup"
+            />
+            <Picker.Item label="Honey Syrup" value="Honey Syrup" />
+            <Picker.Item label="Irish Whiskey" value="Irish Whiskey" />
+            <Picker.Item label="Jamaican Rum" value="Jamaican Rum" />
+            <Picker.Item
+              label="Lemon Flavored Liqueur"
+              value="Lemon Flavored Liqueur"
+            />
+            <Picker.Item label="Lemon Juice" value="Lemon Juice" />
+            <Picker.Item label="Lime Flavored Rum" value="Lime Flavored Rum" />
+            <Picker.Item label="Lime Juice" value="Lime Juice" />
+            <Picker.Item
+              label="Limon Flavored Rum"
+              value="Limon Flavored Rum"
+            />
+            <Picker.Item label="Orange Juice" value="Orange Juice" />
+            <Picker.Item label="Original Vodka" value="Original Vodka" />
+            <Picker.Item
+              label="Peach Flavored Schnapps"
+              value="Peach Flavored Schnapps"
+            />
+            <Picker.Item label="Pineapple Juice" value="Pineapple Juice" />
+            <Picker.Item
+              label="Raspberry Flavored Liqueur"
+              value="Raspberry Flavored Liqueur"
+            />
+            <Picker.Item label="Red Burgundy Wine" value="Red Burgundy Wine" />
+            <Picker.Item label="Rum" value="Rum" />
+            <Picker.Item label="Rum Cream Liqueur" value="Rum Cream Liqueur" />
+            <Picker.Item label="Scotch Whiskey" value="Scotch Whiskey" />
+            <Picker.Item label="Simple Syrup" value="Simple Syrup" />
+            <Picker.Item label="Soda Water" value="Soda Water" />
+            <Picker.Item label="Sour Mix" value="Sour Mix" />
+            <Picker.Item label="Strawberry Syrup" value="Strawberry Syrup" />
+            <Picker.Item label="Sweet Vermouth" value="Sweet Vermouth" />
+            <Picker.Item label="Tennessee Whiskey" value="Tennessee Whiskey" />
+            <Picker.Item label="Toffee Syrup" value="Toffee Syrup" />
+            <Picker.Item label="Tomato Juice" value="Tomato Juice" />
+            <Picker.Item label="Tonic Water" value="Tonic Water" />
+            <Picker.Item label="Triple Sec " value="Triple Sec " />
+            <Picker.Item label="Vermouth" value="Vermouth" />
+            <Picker.Item label="Vodka" value="Vodka" />
+            <Picker.Item
+              label="Whiskey Fruit Spice Liqueur"
+              value="Whiskey Fruit Spice Liqueur"
+            />
+            <Picker.Item label="White Rum" value="White Rum" />
           </Picker>
-          <Picker
-            selectedValue={juiceAmount}
-            onValueChange={value => setJuiceAmount(value)}>
+          <Picker selectedValue={vol4} onValueChange={value => setVol4(value)}>
             <Picker.Item label="용량 선택" value="" />
             <Picker.Item label="0ml" value="0" />
             <Picker.Item label="15ml" value="15" />
