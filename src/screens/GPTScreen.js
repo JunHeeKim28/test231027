@@ -57,6 +57,8 @@ const GPTScreen = () => {
                 alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
                 backgroundColor:
                   message.role === 'user' ? 'orange' : 'lightblue',
+                borderTopLeftRadius: message.role === 'user' ? 10 : 0,
+                borderTopRightRadius: message.role === 'user' ? 0 : 20,
               },
             ]}>
             <Text style={{color: '#000'}}>{message.message}</Text>
