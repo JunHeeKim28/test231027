@@ -8,6 +8,9 @@ const MakeScreen = () => {
   const goToGPTScreen = () => {
     navigation.navigate('GPT');
   };
+  const goToMakeByMyselfScreen = () => {
+    navigation.navigate('MakeByMyself');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.btnContainer}>
@@ -15,7 +18,7 @@ const MakeScreen = () => {
           <Text style={styles.text1}>챗봇으로 제조하기</Text>
         </TouchableOpacity>
         <View style={{width: 10}} />
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={goToMakeByMyselfScreen}>
           <Text style={styles.text1}>직접 제조하기</Text>
         </TouchableOpacity>
       </View>
@@ -29,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#000',
-    flexDirection: 'row',
+    //flexDirection: 'row',
   },
   btnContainer: {
     marginBottom: 120,
@@ -45,7 +48,8 @@ const styles = StyleSheet.create({
   },
   text1: {
     color: 'lightblue',
-    fontSize: 24,
+    fontSize: 28,
+    //fontWeight: '700',
   },
 });
 

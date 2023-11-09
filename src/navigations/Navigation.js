@@ -29,6 +29,7 @@ const Navigation = () => {
         name="List"
         component={ListScreen}
         options={{
+          headerTitle: '이용내역',
           tabBarLabel: '이용내역',
           tabBarIcon: ({color, size}) => (
             <Image

@@ -15,7 +15,28 @@ function FindIDScreen() {
   const [email, setEmail] = useState('');
 
   //이 부분!!
-  const findPW = () => {};
+  const findPW = () => {
+    axios
+      .post('https://ceprj.gachon.ac.kr:60005/user/reset-password', {
+        username,
+        email,
+      })
+      .then(response => {
+        const newPassword = response.data;
+        if (newPassword) {
+          Alert.alert('비밀번호 찾기', `새로운 비밀번호: ${newPassword}`);
+        } else {
+          Alert.alert(
+            '비밀번호 찾기',
+            '등록되지 않은 아이디 혹은 이메일입니다.',
+          );
+        }
+      })
+      .catch(error => {
+        console.error('비밀번호 찾기 오류: ', error);
+        Alert.alert('오류', '비밀번호 찾기 중 오류가 발생했습니다.');
+      });
+  };
 
   return (
     <View style={styles.container}>

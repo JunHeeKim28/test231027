@@ -1,14 +1,34 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import {useState} from 'react';
 import {ScrollView, TouchableOpacity, TextInput} from 'react-native';
+import axios from 'axios';
 const ProfileEditScreen = () => {
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit, setIsEdit] = useState(null);
 
+  const handleEdit = () => {
+    axios
+      .post('http://ceprj.gachon.ac.kr:60005/user/edit_profile', {
+        nickname,
+        password,
+        email,
+        phone,
+      })
+      .then(response => {
+        console.log('successful profile edit: ', response.data);
+        setIsEdit('success');
+        Alert.alert('성공', '프로필 정보가 변경되었습니다.');
+      })
+      .catch(error => {
+        console.error('fail profile edit: ', error);
+        setIsEdit('fail');
+        Alert.alert('오류', '프로필 변경에 실패했습니다.');
+      });
+  };
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.label}>닉네임</Text>
@@ -39,7 +59,7 @@ const ProfileEditScreen = () => {
         keyboardType="numeric"
       />
       <View style={styles.btnContainer}>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={handleEdit}>
           <Text style={styles.btnText}>정보 변경</Text>
         </TouchableOpacity>
       </View>

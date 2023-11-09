@@ -1,25 +1,20 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, Button} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-const PopularScreen = () => {
+const PopularScreen = ({navigation}) => {
+  const dataToSend = '이 데이터를 FavoritesScreen으로 전달하려고 합니다.';
+
+  const navigateToFavorites = () => {
+    navigation.navigate('Favorites', {data: dataToSend});
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text1}>실시간 인기 칵테일</Text>
+    <View>
+      <Text>Popular Screen</Text>
+      <Button title="이동" onPress={navigateToFavorites} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-  },
-  text1: {
-    color: 'lightblue',
-    fontSize: 24,
-  },
-});
 
 export default PopularScreen;

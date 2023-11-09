@@ -1,25 +1,44 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {useState} from 'react';
 
-const SurveyScreen = () => {
+const data = [
+  {id: '1', title: '아이템 1'},
+  {id: '2', title: '아이템 2'},
+  {id: '3', title: '아이템 3'},
+  // ...
+];
+
+const App = () => {
+  const renderItem = ({item}) => {
+    const handlePress = () => {
+      // 아이템을 누를 때 실행할 작업을 여기에 추가
+      console.log(`누른 아이템: ${item.title}`);
+    };
+
+    return (
+      <TouchableOpacity onPress={handlePress}>
+        <View
+          style={{
+            padding: 16,
+            borderBottomWidth: 1,
+            borderBottomColor: 'lightgray',
+          }}>
+          <Text>{item.title}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text1}>만족도 조사!</Text>
+    <View style={{flex: 1}}>
+      <FlatList
+        data={data}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+      />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-  },
-  text1: {
-    color: 'lightblue',
-    fontSize: 24,
-  },
-});
-
-export default SurveyScreen;
+export default App;

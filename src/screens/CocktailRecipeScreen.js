@@ -6,9 +6,11 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const CocktailRecipeScreen = () => {
   const [recipeTitle, setRecipeTitle] = useState('');
@@ -22,6 +24,7 @@ const CocktailRecipeScreen = () => {
   const [juiceAmount, setJuiceAmount] = useState('');
   const [recipeList, setRecipeList] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isSave, setIsSave] = useState(false);
   const STORAGE_KEY = 'cocktailRecipes';
 
   useEffect(() => {
@@ -32,6 +35,7 @@ const CocktailRecipeScreen = () => {
     setModalVisible(!isModalVisible);
   };
 
+  //레시피 저장
   const saveRecipe = async () => {
     if (
       recipeTitle === '' ||
@@ -44,7 +48,7 @@ const CocktailRecipeScreen = () => {
       juiceType === '' ||
       juiceAmount === ''
     ) {
-      alert('항목을 다 채워주세요.');
+      Alert.alert('저장 안됨', '항목을 다 채워주세요.');
       return;
     }
 
@@ -59,10 +63,19 @@ const CocktailRecipeScreen = () => {
       juice: juiceType,
       juiceAmount: juiceAmount,
     };
-
-    setRecipeList([...recipeList, newRecipe]);
-    saveRecipesToStorage([...recipeList, newRecipe]);
-    toggleModal();
+    axios
+      .post('http://ceprj.gachon.ac.kr:60005/recipes', newRecipe)
+      .then(response => {
+        const recipeID = response.data; // 서버로부터 받은 레시피 데이터 (포함된 ID 확인)
+        console.log('Save successful', recipeID);
+        setIsSave(true);
+        setRecipeList([...recipeList, newRecipe]); //레시피 목록에 새로운 레시피 추가
+        saveRecipesToStorage([...recipeList, newRecipe]); //로컬 스토리지에 업데이트된 레시피 목록 저장
+        toggleModal(); //모달 열고 닫기
+      })
+      .catch(error => {
+        console.error('Save error', error);
+      });
   };
 
   const loadRecipesFromStorage = async () => {
@@ -86,13 +99,25 @@ const CocktailRecipeScreen = () => {
     }
   };
 
-  const deleteRecipe = index => {
-    const updatedRecipeList = [...recipeList];
-    updatedRecipeList.splice(index, 1);
-    setRecipeList(updatedRecipeList);
-    saveRecipesToStorage(updatedRecipeList);
+  //레시피 삭제
+  const deleteRecipe = async recipeID => {
+    try {
+      await axios.delete(`http://ceprj.gachon.ac.kr:60005/recipes/${recipeID}`);
+      console.log(`RecipeID ${recipeID} deleted successfully`);
+      const updatedRecipeList = recipeList.filter(
+        recipe => recipe.id !== recipeID,
+      );
+      setRecipeList(updatedRecipeList);
+      saveRecipesToStorage(updatedRecipeList);
+    } catch (error) {
+      console.error(`Error deleting recipeID ${recipeID}:`, error);
+    }
   };
-
+  const makeRecipe = () => {
+    axios.get('http://ceprjmaker.iptime.org:10000/').then(response => {
+      console.log(response.data);
+    });
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.addBtn} onPress={toggleModal}>
@@ -147,13 +172,13 @@ const CocktailRecipeScreen = () => {
             selectedValue={rumAmount}
             onValueChange={value => setRumAmount(value)}>
             <Picker.Item label="용량 선택" value="" />
-            <Picker.Item label="0ml" value="0ml" />
-            <Picker.Item label="15ml" value="15ml" />
-            <Picker.Item label="30ml" value="30ml" />
-            <Picker.Item label="45ml" value="45ml" />
-            <Picker.Item label="60ml" value="60ml" />
-            <Picker.Item label="75ml" value="75ml" />
-            <Picker.Item label="90ml" value="90ml" />
+            <Picker.Item label="0ml" value="0" />
+            <Picker.Item label="15ml" value="15" />
+            <Picker.Item label="30ml" value="30" />
+            <Picker.Item label="45ml" value="45" />
+            <Picker.Item label="60ml" value="60" />
+            <Picker.Item label="75ml" value="75" />
+            <Picker.Item label="90ml" value="90" />
           </Picker>
 
           <Text>진:</Text>
@@ -168,13 +193,13 @@ const CocktailRecipeScreen = () => {
             selectedValue={ginAmount}
             onValueChange={value => setGinAmount(value)}>
             <Picker.Item label="용량 선택" value="" />
-            <Picker.Item label="0ml" value="0ml" />
-            <Picker.Item label="15ml" value="15ml" />
-            <Picker.Item label="30ml" value="30ml" />
-            <Picker.Item label="45ml" value="45ml" />
-            <Picker.Item label="60ml" value="60ml" />
-            <Picker.Item label="75ml" value="75ml" />
-            <Picker.Item label="90ml" value="90ml" />
+            <Picker.Item label="0ml" value="0" />
+            <Picker.Item label="15ml" value="15" />
+            <Picker.Item label="30ml" value="30" />
+            <Picker.Item label="45ml" value="45" />
+            <Picker.Item label="60ml" value="60" />
+            <Picker.Item label="75ml" value="75" />
+            <Picker.Item label="90ml" value="90" />
           </Picker>
 
           <Text>맥주:</Text>
@@ -189,13 +214,13 @@ const CocktailRecipeScreen = () => {
             selectedValue={beerAmount}
             onValueChange={value => setBeerAmount(value)}>
             <Picker.Item label="용량 선택" value="" />
-            <Picker.Item label="0ml" value="0ml" />
-            <Picker.Item label="15ml" value="15ml" />
-            <Picker.Item label="30ml" value="30ml" />
-            <Picker.Item label="45ml" value="45ml" />
-            <Picker.Item label="60ml" value="60ml" />
-            <Picker.Item label="75ml" value="75ml" />
-            <Picker.Item label="90ml" value="90ml" />
+            <Picker.Item label="0ml" value="0" />
+            <Picker.Item label="15ml" value="15" />
+            <Picker.Item label="30ml" value="30" />
+            <Picker.Item label="45ml" value="45" />
+            <Picker.Item label="60ml" value="60" />
+            <Picker.Item label="75ml" value="75" />
+            <Picker.Item label="90ml" value="90" />
           </Picker>
 
           <Text>주스:</Text>
@@ -213,13 +238,13 @@ const CocktailRecipeScreen = () => {
             selectedValue={juiceAmount}
             onValueChange={value => setJuiceAmount(value)}>
             <Picker.Item label="용량 선택" value="" />
-            <Picker.Item label="0ml" value="0ml" />
-            <Picker.Item label="15ml" value="15ml" />
-            <Picker.Item label="30ml" value="30ml" />
-            <Picker.Item label="45ml" value="45ml" />
-            <Picker.Item label="60ml" value="60ml" />
-            <Picker.Item label="75ml" value="75ml" />
-            <Picker.Item label="90ml" value="90ml" />
+            <Picker.Item label="0ml" value="0" />
+            <Picker.Item label="15ml" value="15" />
+            <Picker.Item label="30ml" value="30" />
+            <Picker.Item label="45ml" value="45" />
+            <Picker.Item label="60ml" value="60" />
+            <Picker.Item label="75ml" value="75" />
+            <Picker.Item label="90ml" value="90" />
           </Picker>
           <View style={styles.modalBtn}>
             <TouchableOpacity style={styles.save2Btn} onPress={saveRecipe}>

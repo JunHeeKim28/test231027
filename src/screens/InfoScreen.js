@@ -15,14 +15,19 @@ const InfoScreen = () => {
         </Text>
         <Image source={require('../../assets/CMBtn1.png')} />
         <Text style={styles.text3}>
-          1. 메인 화면에서 [칵테일 제조] 버튼을 누릅니다. Lorem ipsum dolor sit
-          amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-          dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est
-          laborum.
+          1. 메인 화면에서 [칵테일 제조] 버튼을 누릅니다.
+        </Text>
+        <Text style={styles.text3}>
+          2. [챗봇으로 제조하기], [직접 제조하기]버튼 중에서 칵테일을 제조할
+          방법을 고릅니다.
+        </Text>
+        <Text style={styles.text3}>
+          3.[챗봇으로 제조하기]를 고르면 챗봇과 대화하며 이용자의 기분을 살펴
+          칵테일을 추천하여 만들어줍니다.
+        </Text>
+        <Text style={styles.text3}>
+          4. [직접 제조하기]를 고르면 메이커에 넣은 술의 용량을 골라서 칵테일을
+          직접 만들 수 있습니다.
         </Text>
       </View>
     </ScrollView>

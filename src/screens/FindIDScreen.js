@@ -14,30 +14,25 @@ function FindIDScreen() {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
 
-  const findID = async () => {
-    try {
-      if (!nickname || !email) {
-        Alert.alert('입력 오류', '닉네임과 이메일을 모두 입력해주세요.');
-        return;
-      }
-
-      const response = await axios.post(
-        'http://ceprj.gachon.ac.kr:60005/user/findID',
-        {
-          nickname,
-          email,
-        },
-      );
-
-      if (response.data.id) {
-        Alert.alert('아이디 찾기', `찾은 아이디: ${response.data.id}`);
-      } else {
-        Alert.alert('아이디 찾기', '아이디를 찾을 수 없습니다.');
-      }
-    } catch (error) {
-      console.error('아이디 찾기 오류:', error);
-      Alert.alert('아이디 찾기', '서버 오류가 발생했습니다.');
-    }
+  const findID = () => {
+    // 서버로 요청을 보내 아이디를 찾는 부분
+    axios
+      .post('https://ceprj.gachon.ac.kr:60005/user/find-id', {
+        nickname,
+        email,
+      })
+      .then(response => {
+        const foundID = response.data; // 서버에서 반환한 아이디
+        if (foundID) {
+          Alert.alert('아이디 찾기', `찾은 아이디: ${foundID}`);
+        } else {
+          Alert.alert('아이디 찾기', '해당 정보로 아이디를 찾을 수 없습니다.');
+        }
+      })
+      .catch(error => {
+        console.error('아이디 찾기 오류:', error);
+        Alert.alert('오류', '아이디 찾기 중 오류가 발생했습니다.');
+      });
   };
 
   return (

@@ -1,227 +1,103 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+//import FavoritesScreen from './FavoritesScreen';
+import {useNavigation} from '@react-navigation/native';
+import {useFavorites} from './FavoritesContext';
 
-const App = () => {
-  const [Rum, setRum] = useState('');
-  const [Gin, setGin] = useState('');
-  const [Beer, setBeer] = useState('');
-  const [Juice, setJuice] = useState('');
-  const [RumAmount, setRumAmount] = useState('');
-  const [GinAmount, setGinAmount] = useState('');
-  const [BeerAmount, setBeerAmount] = useState('');
-  const [JuiceAmount, setJuiceAmount] = useState('');
+const ListScreen = () => {
+  const navigation = useNavigation();
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+  const {addFavorite} = useFavorites();
+  const [data, setData] = useState([
+    {id: '1', title: '레시피 1'},
+    {id: '2', title: '레시피 2'},
+    {id: '3', title: '레시피 3'},
+    {id: '4', title: '레시피 4'},
+    {id: '5', title: '레시피 5'},
+    {id: '6', title: '레시피 6'},
+    {id: '7', title: '레시피 7'},
+  ]);
 
-  const rums = [
-    {label: '화이트 럼', value: 'white rum'},
-    {label: '골드 럼', value: 'gold rum'},
-    {label: '스파이시드럼', value: 'spiced rum'},
-    {label: '다크 럼', value: 'dark rum'},
-  ];
-  const gins = [
-    {label: '진', value: 'white rum1'},
-    {label: '핸드릭스', value: 'gold rum1'},
-    {label: '탱커레이', value: 'spiced rum1'},
-    {label: '드라이진', value: 'dark rum1'},
-  ];
-  const beers = [
-    {label: '카스', value: 'white rum2'},
-    {label: '테라', value: 'gold rum2'},
-    {label: '칭따오', value: 'spiced rum2'},
-    {label: '기네스', value: 'dark rum2'},
-  ];
-  const juices = [
-    {label: '레몬', value: 'white rum3'},
-    {label: '라임', value: 'gold rum3'},
-    {label: '자몽', value: 'spiced rum3'},
-    {label: '토마토', value: 'dark rum3'},
-  ];
+  const handleItemPress = item => {
+    if (selectedItem === item) {
+      // 이미 선택한 아이템을 다시 누르면 선택 해제
+      setSelectedItem(null);
+    } else {
+      // 다른 아이템을 선택하면 해당 아이템 저장
+      setSelectedItem(item);
+    }
+    //setSelectedItem(item);
+  };
 
-  const rumAmounts = [
-    {label: '0ml', value: '0ml'},
-    {label: '30ml', value: '30ml'},
-    {label: '60ml', value: '60ml'},
-    {label: '90ml', value: '90ml'},
-  ];
-  const ginAmounts = [
-    {label: '0ml', value: '0ml'},
-    {label: '30ml', value: '30ml'},
-    {label: '60ml', value: '60ml'},
-    {label: '90ml', value: '90ml'},
-  ];
-  const beerAmounts = [
-    {label: '0ml', value: '0ml'},
-    {label: '30ml', value: '30ml'},
-    {label: '60ml', value: '60ml'},
-    {label: '90ml', value: '90ml'},
-  ];
-  const juiceAmounts = [
-    {label: '0ml', value: '0ml'},
-    {label: '30ml', value: '30ml'},
-    {label: '60ml', value: '60ml'},
-    {label: '90ml', value: '90ml'},
-  ];
+  const makeCocktail = () => {};
+  const deleteCocktail = () => {
+    if (selectedItem) {
+      const updatedData = data.filter(item => item.id !== selectedItem.id);
+      setData(updatedData);
+      setSelectedItem(null);
+    }
+  };
+
+  const registerFavorites = () => {
+    if (selectedItem) {
+      addFavorite(selectedItem);
+      setSelectedItem(null);
+    }
+  };
+
+  const survey = () => {};
+  const cocktailReview = () => {};
 
   return (
-    <View style={styles.container}>
-      <View style={styles.excontainer}>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.label}>럼: </Text>
-          <Picker
-            selectedValue={Rum}
-            onValueChange={(itemValue, itemIndex) => setRum(itemValue)}
-            style={styles.picker}>
-            {rums.map(rum => (
-              <Picker.Item
-                key={rum.value}
-                label={rum.label}
-                value={rum.value}
-              />
-            ))}
-          </Picker>
-        </View>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.label}>용량: </Text>
-          <Picker
-            selectedValue={RumAmount}
-            onValueChange={(itemValue, itemIndex) => setRumAmount(itemValue)}
-            style={styles.picker}>
-            {rumAmounts.map(rumAmount => (
-              <Picker.Item
-                key={rumAmount.value}
-                label={rumAmount.label}
-                value={rumAmount.value}
-              />
-            ))}
-          </Picker>
-        </View>
-      </View>
-
-      <View style={styles.excontainer}>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.label}>진: </Text>
-          <Picker
-            selectedValue={Gin}
-            onValueChange={(itemValue, itemIndex) => setGin(itemValue)}
-            style={styles.picker}>
-            {gins.map(gin => (
-              <Picker.Item
-                key={gin.value}
-                label={gin.label}
-                value={gin.value}
-              />
-            ))}
-          </Picker>
-        </View>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.label}>용량: </Text>
-          <Picker
-            selectedValue={GinAmount}
-            onValueChange={(itemValue, itemIndex) => setGinAmount(itemValue)}
-            style={styles.picker}>
-            {ginAmounts.map(ginAmount => (
-              <Picker.Item
-                key={ginAmount.value}
-                label={ginAmount.label}
-                value={ginAmount.value}
-              />
-            ))}
-          </Picker>
-        </View>
-      </View>
-      <View style={styles.excontainer}>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.label}>맥주쓰: </Text>
-          <Picker
-            selectedValue={Beer}
-            onValueChange={(itemValue, itemIndex) => setBeer(itemValue)}
-            style={styles.picker}>
-            {beers.map(beer => (
-              <Picker.Item
-                key={beer.value}
-                label={beer.label}
-                value={beer.value}
-              />
-            ))}
-          </Picker>
-        </View>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.label}>용량: </Text>
-          <Picker
-            selectedValue={BeerAmount}
-            onValueChange={(itemValue, itemIndex) => setBeerAmount(itemValue)}
-            style={styles.picker}>
-            {beerAmounts.map(beerAmount => (
-              <Picker.Item
-                key={beerAmount.value}
-                label={beerAmount.label}
-                value={beerAmount.value}
-              />
-            ))}
-          </Picker>
-        </View>
-      </View>
-      <View style={styles.excontainer}>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.label}>주스: </Text>
-          <Picker
-            selectedValue={Juice}
-            onValueChange={(itemValue, itemIndex) => setJuice(itemValue)}
-            style={styles.picker}>
-            {juices.map(juice => (
-              <Picker.Item
-                key={juice.value}
-                label={juice.label}
-                value={juice.value}
-              />
-            ))}
-          </Picker>
-        </View>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.label}>용량: </Text>
-          <Picker
-            selectedValue={JuiceAmount}
-            onValueChange={(itemValue, itemIndex) => setJuiceAmount(itemValue)}
-            style={styles.picker}>
-            {juiceAmounts.map(juiceAmount => (
-              <Picker.Item
-                key={juiceAmount.value}
-                label={juiceAmount.label}
-                value={juiceAmount.value}
-              />
-            ))}
-          </Picker>
-        </View>
-      </View>
+    <View style={{flex: 1}}>
+      {data.map(item => (
+        <TouchableOpacity
+          key={item.id}
+          onPress={() => handleItemPress(item)}
+          style={{
+            padding: 16,
+            borderBottomWidth: 1,
+            borderBottomColor: 'lightgray',
+            backgroundColor: selectedItem === item ? 'lightblue' : 'white',
+          }}>
+          <Text style={styles.txt}>{item.title}</Text>
+          {selectedItem === item && (
+            <View style={styles.btns}>
+              <TouchableOpacity onPress={makeCocktail}>
+                <Text style={styles.txtBtn}>제조</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={deleteCocktail}>
+                <Text style={styles.txtBtn}>삭제</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={registerFavorites}>
+                <Text style={styles.txtBtn}>즐겨찾기 등록</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={survey}>
+                <Text style={styles.txtBtn}>만족도조사</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={cocktailReview}>
+                <Text style={styles.txtBtn}>칵테일리뷰</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    //flexDirection: 'row',
+  txt: {
+    //color: 'lightblue',
+    fontSize: 20,
   },
-  excontainer: {
+  txtBtn: {
+    //color: '#be289d',
+  },
+  btns: {
     flexDirection: 'row',
-  },
-  pickerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 18,
-    marginRight: 10,
-  },
-  picker: {
-    width: Dimensions.get('window').width / 3, // 조절 가능한 폭
-  },
-  selectedText: {
-    fontSize: 16,
-    marginTop: 10,
+    justifyContent: 'space-around',
+    marginTop: 8,
   },
 });
-
-export default App;
+export default ListScreen;
