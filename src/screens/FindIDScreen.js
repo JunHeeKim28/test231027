@@ -1,3 +1,4 @@
+//FindIDScreen.js
 import {
   TextInput,
   Image,
@@ -14,8 +15,8 @@ function FindIDScreen() {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
 
+  // 서버로 요청을 보내 아이디를 찾는 부분
   const findID = () => {
-    // 서버로 요청을 보내 아이디를 찾는 부분
     axios
       .post('https://ceprj.gachon.ac.kr:60005/user/find-id', {
         nickname,

@@ -1,3 +1,4 @@
+//FindPWScreen.js
 import {
   TextInput,
   Image,
@@ -14,7 +15,7 @@ function FindIDScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
 
-  //이 부분!!
+  //비밀번호 찾기 부분
   const findPW = () => {
     axios
       .post('https://ceprj.gachon.ac.kr:60005/user/reset-password', {
