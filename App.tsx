@@ -13,14 +13,15 @@ import FindIDScreen from './src/screens/FindIDScreen';
 import FindPWScreen from './src/screens/FindPWScreen';
 import InfoScreen from './src/screens/InfoScreen';
 import FavoritesScreen from './src/screens/FavoritesScreen';
-import SurveyScreen from './src/screens/SurveyScreen';
 import ReviewScreen from './src/screens/ReviewScreen';
+import CocktailListScreen from './src/screens/CocktailListScreen';
 import ProfileEditScreen from './src/screens/ProfileEditScreen';
 import DeviceEditScreen from './src/screens/DeviceEditScreen';
 import PopularScreen from './src/screens/PopularScreen';
 import MakeScreen from './src/screens/MakeScreen';
 import GPTScreen from './src/screens/GPTScreen';
 import MakeByMyselfScreen from './src/screens/MakeByMyselfScreen';
+import MakePWScreen from './src/screens/MakePWScreen';
 const Stack = createStackNavigator();
 
 function App() {
@@ -83,9 +84,9 @@ function App() {
             options={{headerTitle: '즐겨찾기'}}
           />
           <Stack.Screen
-            name="Survey"
-            component={SurveyScreen}
-            options={{headerTitle: '칵테일 만족도 조사'}}
+            name="CocktailList"
+            component={CocktailListScreen}
+            options={{headerTitle: '칵테일 리스트'}}
           />
           <Stack.Screen
             name="Review"
@@ -121,6 +122,11 @@ function App() {
             name="MakeByMyself"
             component={MakeByMyselfScreen}
             options={{headerTitle: '직접 제조하기'}}
+          />
+          <Stack.Screen
+            name="MakePW"
+            component={MakePWScreen}
+            options={{headerTitle: '새 비밀번호 등록하기'}}
           />
         </Stack.Navigator>
       </FavoritesProvider>

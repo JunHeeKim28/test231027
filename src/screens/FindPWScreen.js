@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import {useState} from 'react';
 import axios from 'axios';
-
+import {useNavigation} from '@react-navigation/native';
 function FindIDScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-
+  const navigation = useNavigation();
   //비밀번호 찾기 부분
   const findPW = () => {
     axios
@@ -25,7 +25,9 @@ function FindIDScreen() {
       .then(response => {
         const newPassword = response.data;
         if (newPassword) {
-          Alert.alert('비밀번호 찾기', `새로운 비밀번호: ${newPassword}`);
+          navigation.navigate('MakePW', {
+            username: username,
+          });
         } else {
           Alert.alert(
             '비밀번호 찾기',

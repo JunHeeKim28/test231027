@@ -34,8 +34,8 @@ const MainScreen = () => {
   const goToInfoScreen = () => {
     navigation.navigate('Info');
   };
-  const goToSurveyScreen = () => {
-    navigation.navigate('Survey');
+  const goToCocktailListScreen = () => {
+    navigation.navigate('CocktailList');
   };
   const goToReviewScreen = () => {
     navigation.navigate('Review');
@@ -103,8 +103,8 @@ const MainScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, {width: buttonSize, height: buttonHeight}]}
-          onPress={goToSurveyScreen}>
-          <Text style={styles.buttonText}>칵테일 만족도 조사</Text>
+          onPress={goToCocktailListScreen}>
+          <Text style={styles.buttonText}>칵테일 리스트</Text>
         </TouchableOpacity>
       </View>
 
