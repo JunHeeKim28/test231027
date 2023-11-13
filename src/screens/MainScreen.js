@@ -7,8 +7,6 @@ import {
   Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-//import CocktailRecipeScreen from './CocktailRecipeScreen';
-//import DeviceRegisterScreen from './DeviceRegisterScreen';
 
 //화면 가로, 세로 길이
 const {width: screenWidth, height: screenHeight} = Dimensions.get('window');

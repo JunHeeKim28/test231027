@@ -11,7 +11,7 @@ import {
 import {useState} from 'react';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
-function FindIDScreen() {
+function FindPWScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const navigation = useNavigation();
@@ -23,15 +23,16 @@ function FindIDScreen() {
         email,
       })
       .then(response => {
-        const newPassword = response.data;
-        if (newPassword) {
+        if (response.data.success) {
+          // 비밀번호 찾기 성공, userId를 MakePWScreen으로 전달
           navigation.navigate('MakePW', {
-            username: username,
+            userId: response.data.userId,
           });
         } else {
+          // 비밀번호 찾기 실패
           Alert.alert(
             '비밀번호 찾기',
-            '등록되지 않은 아이디 혹은 이메일입니다.',
+            response.data.message || '등록되지 않은 아이디 혹은 이메일입니다.',
           );
         }
       })
@@ -115,4 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FindIDScreen;
+export default FindPWScreen;

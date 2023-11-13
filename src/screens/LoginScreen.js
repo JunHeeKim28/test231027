@@ -12,6 +12,7 @@ import axios from 'axios';
 import {Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({navigation}) => {
   const [userId, setUserId] = useState('');
@@ -29,27 +30,33 @@ const LoginScreen = ({navigation}) => {
         userId,
         password,
       })
-      .then(response => {
-        console.log('Login successful', response.data);
-        if (response.data.success) {
-          // 로그인 성공시 다른 화면으로 이동 등의 로직 구현
+      .then(async response => {
+        if (
+          response.data.success &&
+          response.data.user &&
+          response.data.user.userId
+        ) {
+          // AsyncStorage에 사용자 ID 저장
+          await AsyncStorage.setItem('userId', response.data.user.userId);
           navigation.navigate('Navigation');
         } else {
+          // 로그인 실패 또는 userId가 없는 경우의 처리
           Alert.alert(
             '로그인 오류',
             '아이디나 비밀번호가 올바르지 않습니다.',
-            [
-              {
-                text: '확인',
-                onPress: () => {},
-              },
-            ],
+            [{text: '확인', onPress: () => {}}],
             {cancelable: false},
           );
         }
       })
       .catch(error => {
         console.error('Login error', error);
+        Alert.alert(
+          '로그인 오류',
+          '로그인 중 오류가 발생했습니다. 나중에 다시 시도해 주세요.',
+          [{text: '확인', onPress: () => {}}],
+          {cancelable: false},
+        );
       });
   };
   return (

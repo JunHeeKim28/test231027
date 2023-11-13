@@ -1,15 +1,17 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useId} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const MakeByMyselfScreen = () => {
+const MakeByMyselfScreen = ({navigation}) => {
   const [num1, setNum1] = useState('');
   const [num2, setNum2] = useState('');
   const [num3, setNum3] = useState('');
@@ -42,7 +44,9 @@ const MakeByMyselfScreen = () => {
       label: 'Blue Curacao Liqueur',
       value: 'Blue Curacao Liqueur',
     },
+    {label: 'BOMBAY SAPHIRE', value: 'BOMBAY SAPHIRE'},
     {label: 'Bourbon Whiskey', value: 'Bourbon Whiskey'},
+    {label: 'BUNDABERG', value: 'BUNDABERG'},
     {label: 'Canadian Whiskey', value: 'Canadian Whiskey'},
     {label: 'Champagne', value: 'Champagne'},
     {
@@ -71,6 +75,7 @@ const MakeByMyselfScreen = () => {
       value: 'Elderflower Liqueur',
     },
     {label: 'Espresso', value: 'Espresso'},
+    {label: 'G.TINA LIQUEUR', value: 'G.TINA LIQUEUR'},
     {label: 'Gin', value: 'Gin'},
     {label: 'Gin Based Liqueur', value: 'Gin Based Liqueur'},
     {label: 'Ginger Ale', value: 'Ginger Ale'},
@@ -127,8 +132,8 @@ const MakeByMyselfScreen = () => {
     {label: 'White Rum', value: 'White Rum'},
   ];
   const Volume1 = [
-    {label: '선택하세요', value: '선택하세요'}, //얘 지우고 0ml 누르면 axiosError남..왜?
-    {label: '0ml', value: 0},
+    {label: '선택하세요', value: '선택하세요'},
+    {label: '0ml', value: 1},
     {label: '15ml', value: 15},
     {label: '30ml', value: 30},
     {label: '45ml', value: 45},
@@ -136,10 +141,20 @@ const MakeByMyselfScreen = () => {
     {label: '75ml', value: 75},
     {label: '90ml', value: 90},
   ];
+
+  const [userId, setUserId] = useState('');
+  useEffect(() => {
+    // AsyncStorage에서 사용자 ID 가져오기
+    AsyncStorage.getItem('userId').then(storedUserId => {
+      if (storedUserId) {
+        setUserId(storedUserId); // AsyncStorage에서 가져온 userId로 상태 업데이트
+      }
+    });
+  }, []);
   const customCocktail = () => {
     const requestData = {
-      UserID: 'hama', //얘는 이제 서버한테 불러오기
-      recipeTitle: 'CustomCocktail', // 커스텀 칵테일은 무조건 이거
+      UserID: userId, //얘는 이제 서버한테 불러오기
+      recipeTitle: 'Custom Cocktail', // 커스텀 칵테일은 무조건 이거
       first: first,
       second: second,
       third: third,
@@ -150,6 +165,19 @@ const MakeByMyselfScreen = () => {
       .then(response => {
         console.log('Success', response.data);
         console.log(requestData);
+        Alert.alert(
+          '제조 요청',
+          '칵테일을 제조했습니다.',
+          [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.navigate('List', {responseData: response.data});
+              },
+            },
+          ],
+          {cancelable: false}, // 바깥쪽 터치로 알림창을 닫지 못하게 설정
+        );
       })
       .catch(error => {
         console.error('Error', error);
@@ -298,6 +326,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    //backgroundColor:'#000'
     //flexDirection: 'row',
   },
   excontainer: {

@@ -23,11 +23,13 @@ function FindIDScreen() {
         email,
       })
       .then(response => {
-        const foundID = response.data; // 서버에서 반환한 아이디
-        console.log(foundID);
-        if (foundID) {
-          Alert.alert('아이디 찾기', `찾은 아이디: ${foundID.userId}`);
+        const responseData = response.data;
+        console.log(responseData);
+        if (responseData.success) {
+          // 서버에서 'success: true'로 응답한 경우
+          Alert.alert('아이디 찾기', `찾은 아이디: ${responseData.userId}`);
         } else {
+          // 서버에서 'success: false'로 응답한 경우
           Alert.alert('아이디 찾기', '해당 정보로 아이디를 찾을 수 없습니다.');
         }
       })

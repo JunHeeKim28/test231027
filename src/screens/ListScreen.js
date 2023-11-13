@@ -1,101 +1,58 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useFavorites} from './FavoritesContext';
+import React, {useState, useEffect} from 'react';
+import {View, Text, FlatList, StyleSheet} from 'react-native';
 
-const ListScreen = () => {
-  const navigation = useNavigation();
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [favorites, setFavorites] = useState([]);
-  const {addFavorite} = useFavorites();
-  const [data, setData] = useState([
-    {id: '1', title: '레시피 1'},
-    {id: '2', title: '레시피 2'},
-    {id: '3', title: '레시피 3'},
-    {id: '4', title: '레시피 4'},
-    {id: '5', title: '레시피 5'},
-    {id: '6', title: '레시피 6'},
-    {id: '7', title: '레시피 7'},
-  ]);
+const ListScreen = ({route}) => {
+  // route.params가 undefined인 경우를 방지하기 위해 초기값 설정
+  const {responseData} = route.params || {};
+  // 상태를 설정하고, 초기값은 빈 배열로 설정
+  const [history, setHistory] = useState([]);
 
-  const handleItemPress = item => {
-    if (selectedItem === item) {
-      // 이미 선택한 아이템을 다시 누르면 선택 해제
-      setSelectedItem(null);
-    } else {
-      // 다른 아이템을 선택하면 해당 아이템 저장
-      setSelectedItem(item);
+  useEffect(() => {
+    // responseData가 존재하는 경우에만 처리
+    if (responseData && responseData.recipeTitle && responseData.date) {
+      // responseData에서 필요한 속성만 추출하여 새로운 이용내역을 생성
+      const newTransaction = {
+        recipeTitle: responseData.recipeTitle,
+        date: responseData.date,
+      };
+      // 새로운 이용내역이 추가될 때마다 상태 업데이트
+      setHistory(prevHistory => [...prevHistory, newTransaction]);
     }
-  };
+  }, [responseData]);
 
-  const makeCocktail = () => {};
-  const deleteCocktail = () => {
-    if (selectedItem) {
-      const updatedData = data.filter(item => item.id !== selectedItem.id);
-      setData(updatedData);
-      setSelectedItem(null);
-    }
-  };
-
-  const registerFavorites = () => {
-    if (selectedItem) {
-      addFavorite(selectedItem);
-      setSelectedItem(null);
-    }
-  };
-
-  const survey = () => {};
-  const cocktailReview = () => {};
+  const renderItem = ({item}) => (
+    <View style={styles.itemContainer}>
+      <Text style={styles.title}>{item.recipeTitle}</Text>
+      <Text style={styles.date}>제조 날짜: {item.date}</Text>
+    </View>
+  );
 
   return (
-    <View style={{flex: 1}}>
-      {data.map(item => (
-        <TouchableOpacity
-          key={item.id}
-          onPress={() => handleItemPress(item)}
-          style={{
-            padding: 16,
-            borderBottomWidth: 1,
-            borderBottomColor: 'lightgray',
-            backgroundColor: selectedItem === item ? 'lightblue' : 'white',
-          }}>
-          <Text style={styles.txt}>{item.title}</Text>
-          {selectedItem === item && (
-            <View style={styles.btns}>
-              <TouchableOpacity onPress={makeCocktail}>
-                <Text style={styles.txtBtn}>제조</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={deleteCocktail}>
-                <Text style={styles.txtBtn}>삭제</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={registerFavorites}>
-                <Text style={styles.txtBtn}>즐겨찾기 등록</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={survey}>
-                <Text style={styles.txtBtn}>만족도조사</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={cocktailReview}>
-                <Text style={styles.txtBtn}>칵테일리뷰</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </TouchableOpacity>
-      ))}
+    <View style={styles.container}>
+      <FlatList
+        data={history}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+      />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  txt: {
-    //color: 'lightblue',
-    fontSize: 20,
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#000',
   },
-  txtBtn: {
-    //color: '#be289d',
+  itemContainer: {
+    padding: 20,
+    marginVertical: 8,
+    backgroundColor: 'lightpink',
+    borderRadius: 8,
   },
-  btns: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 8,
+  title: {
+    fontSize: 18,
+    color: '#000',
   },
 });
 export default ListScreen;
