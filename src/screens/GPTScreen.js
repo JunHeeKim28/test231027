@@ -40,6 +40,18 @@ const GPTScreen = ({navigation}) => {
     const cocktailName = extractCocktailName(lastAssistantMessage);
 
     try {
+      // 1. 사용자의 Raspberry Pi IP 주소 요청
+      const ipResponse = await axios.post(
+        'http://ceprj.gachon.ac.kr:60005/user/req_ip',
+        {
+          id: userId,
+        },
+      );
+
+      if (!ipResponse.data.success) {
+        throw new Error('Raspberry Pi IP 주소를 가져오는데 실패했습니다.');
+      }
+
       const response = await axios.post(
         'http://ceprj.gachon.ac.kr:60005/user/get-cocktail-info',
         {
@@ -57,19 +69,62 @@ const GPTScreen = ({navigation}) => {
         fourth: cocktailInfo.C_VOLUME4 === '' ? 1 : cocktailInfo.C_VOLUME4,
       };
 
-      axios
-        .post('http://ceprjmaker.iptime.org:10000/make_cocktail', requestData)
-        .then(response => {
-          Alert.alert(
-            '제조 요청 성공',
-            '칵테일 제조 요청이 성공적으로 전송되었습니다.',
-          );
-        })
-        .catch(error => {
-          Alert.alert('제조 요청 실패', '칵테일 제조 요청에 실패했습니다.');
-        });
+      const raspberryPiIp = ipResponse.data.raspberryPiIp;
+      const Response2 = await axios.post(
+        'http://ceprj.gachon.ac.kr:60005/user/device_status',
+        {
+          id: userId,
+        },
+      );
+
+      if (Response2.data.devstatus !== 'inprogress') {
+        // 3. 칵테일 제조 요청
+        console.log(raspberryPiIp);
+        console.log(requestData);
+        const makeResponse = await axios.post(
+          `http://${raspberryPiIp}:10000/make_cocktail`,
+          requestData,
+        );
+
+        if (makeResponse.data.success) {
+          console.log('제조에 성공하였습니다.');
+          navigation.navigate('Main');
+        } else {
+          throw new Error('칵테일 제조를 실패하였습니다.');
+        }
+
+        console.log('Success', makeResponse.data);
+        Alert.alert(
+          '제조 요청',
+          '칵테일을 제조 중입니다.',
+          [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.navigate('List', {responseData: makeResponse.data});
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      } else {
+        Alert.alert(
+          '제조 요청',
+          '메이커가 제조 중입니다. 잠시 후 시도해 주세요.',
+          [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.navigate('List', {responseData: makeResponse.data});
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      }
     } catch (error) {
-      Alert.alert('서버 오류', '칵테일 정보를 가져오는데 실패했습니다.');
+      console.error('Error', error);
+      Alert.alert('오류', error.message);
     }
   };
 

@@ -44,9 +44,7 @@ const MakeByMyselfScreen = ({navigation}) => {
       label: 'Blue Curacao Liqueur',
       value: 'Blue Curacao Liqueur',
     },
-    {label: 'BOMBAY SAPHIRE', value: 'BOMBAY SAPHIRE'},
     {label: 'Bourbon Whiskey', value: 'Bourbon Whiskey'},
-    {label: 'BUNDABERG', value: 'BUNDABERG'},
     {label: 'Canadian Whiskey', value: 'Canadian Whiskey'},
     {label: 'Champagne', value: 'Champagne'},
     {
@@ -75,7 +73,6 @@ const MakeByMyselfScreen = ({navigation}) => {
       value: 'Elderflower Liqueur',
     },
     {label: 'Espresso', value: 'Espresso'},
-    {label: 'G.TINA LIQUEUR', value: 'G.TINA LIQUEUR'},
     {label: 'Gin', value: 'Gin'},
     {label: 'Gin Based Liqueur', value: 'Gin Based Liqueur'},
     {label: 'Ginger Ale', value: 'Ginger Ale'},
@@ -141,7 +138,6 @@ const MakeByMyselfScreen = ({navigation}) => {
     {label: '75ml', value: 75},
     {label: '90ml', value: 90},
   ];
-
   const [userId, setUserId] = useState('');
   useEffect(() => {
     // AsyncStorage에서 사용자 ID 가져오기
@@ -151,37 +147,83 @@ const MakeByMyselfScreen = ({navigation}) => {
       }
     });
   }, []);
-  const customCocktail = () => {
-    const requestData = {
-      UserID: userId, //얘는 이제 서버한테 불러오기
-      recipeTitle: 'Custom Cocktail', // 커스텀 칵테일은 무조건 이거
-      first: first,
-      second: second,
-      third: third,
-      fourth: fourth,
-    };
-    axios
-      .post('http://ceprjmaker.iptime.org:10000/make_cocktail', requestData)
-      .then(response => {
-        console.log('Success', response.data);
+  const customCocktail = async () => {
+    try {
+      // 1. 사용자의 Raspberry Pi IP 주소 요청
+      const ipResponse = await axios.post(
+        'http://ceprj.gachon.ac.kr:60005/user/req_ip',
+        {
+          id: userId,
+        },
+      );
+
+      if (!ipResponse.data.success) {
+        throw new Error('Raspberry Pi IP 주소를 가져오는데 실패했습니다.');
+      }
+
+      const raspberryPiIp = ipResponse.data.raspberryPiIp;
+      const Response2 = await axios.post(
+        'http://ceprj.gachon.ac.kr:60005/user/device_status',
+        {
+          id: userId,
+        },
+      );
+      if (Response2.data.devstatus !== 'inprogress') {
+        // 2. 칵테일 제조 요청 데이터
+        const requestData = {
+          UserID: userId,
+          recipeTitle: 'Custom Cocktail',
+          first: first === '' ? 1 : first,
+          second: second === '' ? 1 : second,
+          third: third === '' ? 1 : third,
+          fourth: fourth === '' ? 1 : fourth,
+        };
+
+        // 3. 칵테일 제조 요청
+        console.log(raspberryPiIp);
         console.log(requestData);
+        const makeResponse = await axios.post(
+          `http://${raspberryPiIp}:10000/make_cocktail`,
+          requestData,
+        );
+
+        if (makeResponse.data) {
+          throw new Error('칵테일 제조가 완료 되었습니다.');
+        }
+
+        console.log('Success', makeResponse.data);
         Alert.alert(
           '제조 요청',
-          '칵테일을 제조했습니다.',
+          '칵테일을 제조 중입니다.',
           [
             {
               text: '확인',
               onPress: () => {
-                navigation.navigate('List', {responseData: response.data});
+                navigation.navigate('List', {responseData: makeResponse.data});
               },
             },
           ],
-          {cancelable: false}, // 바깥쪽 터치로 알림창을 닫지 못하게 설정
+          {cancelable: false},
         );
-      })
-      .catch(error => {
-        console.error('Error', error);
-      });
+      } else {
+        Alert.alert(
+          '제조 요청',
+          '메이커가 제조 중입니다. 잠시 후 시도해 주세요.',
+          [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.navigate('List', {responseData: makeResponse.data});
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      }
+    } catch (error) {
+      console.error('Error', error);
+      Alert.alert('오류', error.message);
+    }
   };
 
   return (

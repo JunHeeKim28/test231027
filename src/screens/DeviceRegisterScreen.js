@@ -1,50 +1,61 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Alert} from 'react-native';
-import {RNCamera} from 'react-native-camera';
+import {StyleSheet, Alert, Text, TouchableOpacity} from 'react-native';
+import QRCodeScanner from 'react-native-qrcode-scanner';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 
 const DeviceRegisterScreen = () => {
   const navigation = useNavigation();
-  const [isProcessing, setIsProcessing] = useState(false); // 중복 스캔 방지를 위한 상태
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const onBarCodeRead = async e => {
-    if (isProcessing) return; // 이미 처리 중인 경우 더 이상 진행하지 않음
-    setIsProcessing(true); // 처리 시작
+  const onReadQRCode = async ({data}) => {
+    if (isProcessing) return;
+    setIsProcessing(true);
 
     try {
-      console.log(e.data);
-      const deviceId = e.data.split('/').pop();
+      console.log(data);
+      const deviceId = data.split('/').pop();
       const url = `http://ceprj.gachon.ac.kr:60005/user/getdevice/${deviceId}`;
       const response = await axios.post(url);
 
       if (response.data.success) {
         Alert.alert('성공', '기기가 성공적으로 등록되었습니다.');
-        navigation.navigate('MainScreen');
+        navigation.navigate('Main');
       } else {
         console.log('서버 오류:', response.data.message);
       }
     } catch (error) {
       console.error('요청 처리 중 오류:', error);
     } finally {
-      setIsProcessing(false); // 처리 완료
+      setIsProcessing(false);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <RNCamera style={styles.preview} onBarCodeRead={onBarCodeRead} />
-    </View>
+    <QRCodeScanner
+      onRead={onReadQRCode}
+      topContent={
+        <Text style={styles.centerText}>
+          기기의 QR 코드를 스캔하여 등록하세요.
+        </Text>
+      }
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  centerText: {
     flex: 1,
-    flexDirection: 'column',
+    fontSize: 18,
+    padding: 32,
+    color: '#777',
   },
-  preview: {
-    flex: 1,
+  buttonText: {
+    fontSize: 21,
+    color: 'rgb(0,122,255)',
+  },
+  buttonTouchable: {
+    padding: 16,
   },
 });
 

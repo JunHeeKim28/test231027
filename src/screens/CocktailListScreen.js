@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, FlatList, StyleSheet, TextInput} from 'react-native';
 import axios from 'axios';
 
-const FlatListExample = () => {
+const CocktailListScreen = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FlatListExample;
+export default CocktailListScreen;
