@@ -21,13 +21,23 @@ const InfoScreen = () => {
           2. [챗봇으로 제조하기], [직접 제조하기]버튼 중에서 칵테일을 제조할
           방법을 고릅니다.
         </Text>
+        <View style={styles.imgContainer}>
+          <Image
+            style={styles.img1}
+            source={require('../../assets/ChatWithGPT.jpg')}
+          />
+          <Text style={styles.text3}>
+            3.[챗봇으로 제조하기]를 고르면 챗봇과 대화하며 이용자의 기분을 살펴
+            칵테일을 추천하여 만들어줍니다.
+          </Text>
+          <Image
+            style={styles.img2}
+            source={require('../../assets/CustomPlus.png')}
+          />
+        </View>
         <Text style={styles.text3}>
-          3.[챗봇으로 제조하기]를 고르면 챗봇과 대화하며 이용자의 기분을 살펴
-          칵테일을 추천하여 만들어줍니다.
-        </Text>
-        <Text style={styles.text3}>
-          4. [직접 제조하기]를 고르면 메이커에 넣은 술의 용량을 골라서 칵테일을
-          직접 만들 수 있습니다.
+          4. [직접 제조하기]를 고르면 메이커에 넣은 술의 재료와 용량을 골라서
+          칵테일을 직접 만들 수 있습니다.
         </Text>
       </View>
     </ScrollView>
@@ -39,26 +49,39 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
   },
+  // imgContainer: {
+  //   flexDirection: 'row',
+  // },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
   },
+  img1: {
+    width: 250,
+    height: 500,
+    marginTop: 50,
+  },
+  img2: {
+    width: 'auto',
+    height: 200,
+    marginTop: 50,
+  },
   text1: {
-    fontSize: 25,
-    color: 'lightblue',
+    fontSize: 20,
+    color: 'white',
     marginBottom: 30,
   },
   text2: {
-    fontSize: 25,
-    color: 'lightblue',
+    fontSize: 20,
+    color: 'white',
     marginBottom: 10,
     marginTop: 30,
   },
   text3: {
-    fontSize: 25,
-    color: 'lightblue',
+    fontSize: 20,
+    color: 'white',
     marginBottom: 10,
     marginTop: 30,
   },

@@ -7,12 +7,12 @@ import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import Navigation from './src/navigations/Navigation';
+import ReviewNav from './src/navigations/ReviewNav';
 import CocktailRecipeScreen from './src/screens/CocktailRecipeScreen';
 import DeviceRegisterScreen from './src/screens/DeviceRegisterScreen';
 import FindIDScreen from './src/screens/FindIDScreen';
 import FindPWScreen from './src/screens/FindPWScreen';
 import InfoScreen from './src/screens/InfoScreen';
-import FavoritesScreen from './src/screens/FavoritesScreen';
 import ReviewScreen from './src/screens/ReviewScreen';
 import CocktailListScreen from './src/screens/CocktailListScreen';
 import ProfileEditScreen from './src/screens/ProfileEditScreen';
@@ -22,7 +22,13 @@ import MakeScreen from './src/screens/MakeScreen';
 import GPTScreen from './src/screens/GPTScreen';
 import MakeByMyselfScreen from './src/screens/MakeByMyselfScreen';
 import MakePWScreen from './src/screens/MakePWScreen';
+import LEDScreen from './src/screens/LEDScreen';
+import FeedbackScreen from './src/screens/FeedbackScreen';
 const Stack = createStackNavigator();
+
+//C:\Users\82103\test231027\node_modules\react-native\index.js 에서
+// ERROR  ViewPropTypes will be removed from React Native, along with all other PropTypes.
+//주석처리함.
 
 function App() {
   return (
@@ -79,9 +85,9 @@ function App() {
             options={{headerTitle: '이용방법'}}
           />
           <Stack.Screen
-            name="Favorites"
-            component={FavoritesScreen}
-            options={{headerTitle: '즐겨찾기'}}
+            name="LED"
+            component={LEDScreen}
+            options={{headerTitle: '네오픽셀'}}
           />
           <Stack.Screen
             name="CocktailList"
@@ -127,6 +133,16 @@ function App() {
             name="MakePW"
             component={MakePWScreen}
             options={{headerTitle: '새 비밀번호 등록하기'}}
+          />
+          <Stack.Screen
+            name="ReviewNav"
+            component={ReviewNav}
+            options={{headerTitle: '칵테일 리뷰'}}
+          />
+          <Stack.Screen
+            name="Feedback"
+            component={FeedbackScreen}
+            options={{headerTitle: '사용자 피드백'}}
           />
         </Stack.Navigator>
       </FavoritesProvider>

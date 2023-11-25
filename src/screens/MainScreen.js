@@ -18,8 +18,8 @@ const buttonHeight = buttonSize / 2;
 const MainScreen = () => {
   const navigation = useNavigation();
 
-  const goToFavoritesScreen = () => {
-    navigation.navigate('Favorites');
+  const goToLEDScreen = () => {
+    navigation.navigate('LED');
   };
 
   const gotoCocktailRecipeScreen = () => {
@@ -61,13 +61,13 @@ const MainScreen = () => {
         <View style={styles.buttonColumn}>
           <TouchableOpacity
             style={[styles.button, {width: buttonSize, height: buttonHeight}]}
-            onPress={goToFavoritesScreen}>
+            onPress={goToLEDScreen}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
-                source={require('../../assets/star.png')}
+                source={require('../../assets/ringLED.png')}
                 style={styles.image2}
               />
-              <Text style={styles.buttonText}>즐겨찾기</Text>
+              <Text style={styles.buttonText}>LED 제어</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -75,7 +75,7 @@ const MainScreen = () => {
             style={[styles.button, {width: buttonSize, height: buttonHeight}]}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
-                source={require('../../assets/information.png')}
+                source={require('../../assets/info.png')}
                 style={styles.image2}
               />
               <Text style={styles.buttonText}>이용방법</Text>
@@ -149,13 +149,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   image2: {
-    width: 50,
-    height: 50,
-    marginRight: 5,
+    width: 35,
+    height: 35,
+    marginRight: 15,
   },
   buttonText: {
     color: 'white',
-    fontSize: 26,
+    fontSize: 20,
     textAlign: 'center',
     fontWeight: 'bold',
   },

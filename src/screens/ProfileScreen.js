@@ -7,11 +7,11 @@ import axios from 'axios';
 const ProfileScreen = () => {
   const navigation = useNavigation();
 
-  const goToReviewScreen = () => {
-    navigation.navigate('Review');
+  const goToReviewNav = () => {
+    navigation.navigate('ReviewNav');
   };
-  const goToFavoritesScreen = () => {
-    navigation.navigate('Favorites');
+  const goToFeedbackScreen = () => {
+    navigation.navigate('Feedback');
   };
   const goToListScreen = () => {
     navigation.navigate('List');
@@ -129,11 +129,12 @@ const ProfileScreen = () => {
       <TouchableOpacity onPress={goToListScreen}>
         <Text style={styles.txt}>이용 내역</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={goToFavoritesScreen}>
-        <Text style={styles.txt}>즐겨찾기</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={goToReviewScreen}>
+
+      <TouchableOpacity onPress={goToReviewNav}>
         <Text style={styles.txt}>칵테일 리뷰</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={goToFeedbackScreen}>
+        <Text style={styles.txt}>사용자 피드백</Text>
       </TouchableOpacity>
       <View
         style={{
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   },
   txt: {
     marginLeft: 20,
-    fontSize: 30,
+    fontSize: 25,
     color: 'white',
     marginVertical: 20,
   },

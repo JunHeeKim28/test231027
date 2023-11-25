@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Alert, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Alert, Text} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';

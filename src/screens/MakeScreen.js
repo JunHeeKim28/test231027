@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text1: {
-    color: 'lightblue',
-    fontSize: 28,
+    color: 'white',
+    fontSize: 20,
     //fontWeight: '700',
   },
 });

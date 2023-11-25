@@ -1,39 +1,79 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, StyleSheet} from 'react-native';
+//ListScreen.js 이용내역 화면
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  FlatList,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const ListScreen = ({route}) => {
-  // route.params가 undefined인 경우를 방지하기 위해 초기값 설정
-  const {responseData} = route.params || {};
-  // 상태를 설정하고, 초기값은 빈 배열로 설정
-  const [history, setHistory] = useState([]);
+const ListScreen = () => {
+  const [myHistoryList, setMyHistoryList] = useState([]);
+  const [userId, setUserId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // responseData가 존재하는 경우에만 처리
-    if (responseData && responseData.recipeTitle && responseData.date) {
-      // responseData에서 필요한 속성만 추출하여 새로운 이용내역을 생성
-      const newTransaction = {
-        recipeTitle: responseData.recipeTitle,
-        date: responseData.date,
-      };
-      // 새로운 이용내역이 추가될 때마다 상태 업데이트
-      setHistory(prevHistory => [...prevHistory, newTransaction]);
+    AsyncStorage.getItem('userId').then(storedUserId => {
+      if (storedUserId) {
+        setUserId(storedUserId);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.post(
+          'http://ceprj.gachon.ac.kr:60005/user/history',
+          {ID: userId},
+        );
+        setMyHistoryList(response.data.data.useLogs);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (userId) {
+      fetchData();
     }
-  }, [responseData]);
+  }, [userId]);
+
+  const deleteItem = async itemId => {
+    // 삭제 기능 구현
+  };
 
   const renderItem = ({item}) => (
     <View style={styles.itemContainer}>
-      <Text style={styles.title}>{item.recipeTitle}</Text>
-      <Text style={styles.date}>제조 날짜: {item.date}</Text>
+      <View>
+        <Text style={styles.itemTitle}>{item.USE_NAME}</Text>
+        <Text style={styles.itemText}>{item.USE_DATE}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.deleteContainer}
+        onPress={() => deleteItem(item.USE_ID)}>
+        <Text style={styles.deleteButton}>삭제</Text>
+      </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={history}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-      />
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#be289d" />
+      ) : (
+        <FlatList
+          data={myHistoryList}
+          keyExtractor={item => item.USE_ID.toString()}
+          renderItem={renderItem}
+        />
+      )}
     </View>
   );
 };
@@ -45,14 +85,35 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
   itemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 20,
+    borderBottomColor: '#ccc',
     marginVertical: 8,
-    backgroundColor: 'lightpink',
+    backgroundColor: '#f0f0f0',
     borderRadius: 8,
   },
-  title: {
-    fontSize: 18,
+  itemTitle: {
+    fontSize: 20,
     color: '#000',
+    fontWeight: 'bold',
+  },
+  itemText: {
+    fontSize: 14,
+  },
+  deleteContainer: {
+    //flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#be289d',
+    width: 40,
+    height: 40,
+    borderRadius: 5,
+  },
+  deleteButton: {
+    //marginLeft: 'auto',
+    color: '#fff',
   },
 });
+
 export default ListScreen;

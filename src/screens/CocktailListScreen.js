@@ -64,7 +64,7 @@ const CocktailListScreen = () => {
       />
       <FlatList
         data={filteredData}
-        keyExtractor={item => item.id}
+        //keyExtractor={item => item.id}
         renderItem={renderItem}
       />
     </View>
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
   },
   searchBar: {
     fontSize: 18,
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 20,
+    fontWeight: 'bold',
     color: '#000',
   },
   itemContainer: {
