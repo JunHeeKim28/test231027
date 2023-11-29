@@ -39,7 +39,7 @@ const PopularScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Top 10 Cocktails</Text>
+      <Text style={styles.header}>인기 칵테일 순위</Text>
       {isLoading ? (
         <Text style={styles.loadingText}>Loading...</Text>
       ) : (

@@ -1,16 +1,18 @@
 //ReviewScreen.js <리뷰 작성>
-import React from 'react';
+//ReviewScreen.js <리뷰 작성>
+import React, {useEffect, useState} from 'react';
 import {
-  Modal,
   View,
   FlatList,
   Text,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
+  Alert,
+  Modal,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useEffect, useState} from 'react';
 import StarRating from 'react-native-star-rating';
 import axios from 'axios';
 const ReviewScreen = () => {
@@ -37,7 +39,7 @@ const ReviewScreen = () => {
           'http://ceprj.gachon.ac.kr:60005/user/history',
           {ID: userId},
         );
-        setMyHistoryList(response.data.data.useLogs);
+        setMyHistoryList(response.data.useLogs);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -62,35 +64,53 @@ const ReviewScreen = () => {
   };
   const handleRating = async () => {
     try {
-      // 서버에 평가 정보 전송
-      await axios.post('http://ceprj.gachon.ac.kr:60005/user/rating', {
-        USE_NAME: selectedItem.USE_NAME,
-        RATING: starRating,
-      });
+      const response = await axios.post(
+        'http://ceprj.gachon.ac.kr:60005/user/horoscope',
+        {
+          USE_NAME: selectedItem.USE_NAME,
+          RATING: starRating,
+        },
+      );
+
       // 서버 전송이 성공하면 해당 항목을 화면에서 제거
       setMyHistoryList(prevList =>
         prevList.filter(item => item.USE_ID !== selectedItem.USE_ID),
       );
+
+      // 응답 확인 및 성공 메시지 표시
+      console.log(response.data.success);
+      if (response.data.success) {
+        Alert.alert('성공', '리뷰가 성공적으로 업데이트되었습니다.');
+      } else {
+        Alert.alert('실패', '리뷰 업데이트에 실패했습니다.');
+      }
     } catch (error) {
       console.error('Error submitting rating:', error);
+      Alert.alert('오류', '리뷰 제출 중 오류가 발생했습니다.');
     } finally {
       closeModal();
     }
   };
 
-  const renderItem = ({item}) => (
-    <View style={styles.itemContainer}>
-      <View>
-        <Text style={styles.itemTitle}>{item.USE_NAME}</Text>
-        <Text style={styles.itemText}>{item.USE_DATE}</Text>
+  const renderItem = ({item}) => {
+    const imageUrl = item.C_IMG.startsWith('http')
+      ? item.C_IMG
+      : `http://ceprj.gachon.ac.kr:60005${item.C_IMG}`;
+    return (
+      <View style={styles.itemContainer}>
+        <Image source={{uri: imageUrl}} style={styles.imageStyle} />
+        <View style={styles.textContainer}>
+          <Text style={styles.itemTitle}>{item.USE_NAME}</Text>
+          <Text style={styles.itemText}>{item.USE_DATE}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.starContainer}
+          onPress={() => openModal(item)}>
+          <Text style={styles.starBtn}>별점</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.starContainer}
-        onPress={() => openModal(item)}>
-        <Text style={styles.starBtn}>별점</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -141,6 +161,12 @@ const ReviewScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  imageStyle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
   container: {
     flex: 1,
     padding: 16,

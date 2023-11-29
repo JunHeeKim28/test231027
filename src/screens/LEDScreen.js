@@ -39,7 +39,7 @@ const LEDScreen = () => {
         `http://${raspberryPiIp}:10000/set_brightness`,
         {brightness: brightness},
       );
-      console.log(makeResponse);
+      // console.log(makeResponse);
       console.log('Success', makeResponse.data);
     } catch (error) {
       console.error('Error', error);
@@ -171,7 +171,7 @@ const LEDScreen = () => {
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btn} onPress={handleChasing}>
-          <Text style={styles.btnTxt}>채이싱</Text>
+          <Text style={styles.btnTxt}>체이싱</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={handleSparkle}>
           <Text style={styles.btnTxt}>스파클</Text>

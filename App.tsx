@@ -7,7 +7,6 @@ import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import Navigation from './src/navigations/Navigation';
-import ReviewNav from './src/navigations/ReviewNav';
 import CocktailRecipeScreen from './src/screens/CocktailRecipeScreen';
 import DeviceRegisterScreen from './src/screens/DeviceRegisterScreen';
 import FindIDScreen from './src/screens/FindIDScreen';
@@ -112,7 +111,7 @@ function App() {
           <Stack.Screen
             name="Popular"
             component={PopularScreen}
-            options={{headerTitle: '실시간 인기 칵테일'}}
+            options={{headerTitle: '인기 칵테일 순위'}}
           />
           <Stack.Screen
             name="Make"
@@ -133,11 +132,6 @@ function App() {
             name="MakePW"
             component={MakePWScreen}
             options={{headerTitle: '새 비밀번호 등록하기'}}
-          />
-          <Stack.Screen
-            name="ReviewNav"
-            component={ReviewNav}
-            options={{headerTitle: '칵테일 리뷰'}}
           />
           <Stack.Screen
             name="Feedback"

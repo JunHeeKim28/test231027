@@ -7,8 +7,8 @@ import axios from 'axios';
 const ProfileScreen = () => {
   const navigation = useNavigation();
 
-  const goToReviewNav = () => {
-    navigation.navigate('ReviewNav');
+  const goToReviewScreen = () => {
+    navigation.navigate('Review');
   };
   const goToFeedbackScreen = () => {
     navigation.navigate('Feedback');
@@ -130,7 +130,7 @@ const ProfileScreen = () => {
         <Text style={styles.txt}>이용 내역</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={goToReviewNav}>
+      <TouchableOpacity onPress={goToReviewScreen}>
         <Text style={styles.txt}>칵테일 리뷰</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={goToFeedbackScreen}>

@@ -90,7 +90,7 @@ const MainScreen = () => {
           styles.button,
           {width: buttonSize * 2, height: buttonSize + 10},
         ]}>
-        <Text style={styles.buttonText}>실시간 인기 칵테일</Text>
+        <Text style={styles.buttonText}>인기 칵테일 순위</Text>
       </TouchableOpacity>
 
       <View style={styles.buttonContainer}>

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -32,7 +33,7 @@ const ListScreen = () => {
           'http://ceprj.gachon.ac.kr:60005/user/history',
           {ID: userId},
         );
-        setMyHistoryList(response.data.data.useLogs);
+        setMyHistoryList(response.data.useLogs);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -46,23 +47,41 @@ const ListScreen = () => {
   }, [userId]);
 
   const deleteItem = async itemId => {
-    // 삭제 기능 구현
+    setIsLoading(true);
+    try {
+      await axios.post('http://ceprj.gachon.ac.kr:60005/user/deleteHistory', {
+        USE_ID: itemId,
+      });
+      // 삭제 후 목록을 업데이트합니다.
+      setMyHistoryList(prevList =>
+        prevList.filter(item => item.USE_ID !== itemId),
+      );
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const renderItem = ({item}) => (
-    <View style={styles.itemContainer}>
-      <View>
-        <Text style={styles.itemTitle}>{item.USE_NAME}</Text>
-        <Text style={styles.itemText}>{item.USE_DATE}</Text>
+  const renderItem = ({item}) => {
+    const imageUrl = item.C_IMG.startsWith('http')
+      ? item.C_IMG
+      : `http://ceprj.gachon.ac.kr:60005${item.C_IMG}`;
+    return (
+      <View style={styles.itemContainer}>
+        <Image source={{uri: imageUrl}} style={styles.imageStyle} />
+        <View style={styles.textContainer}>
+          <Text style={styles.itemTitle}>{item.USE_NAME}</Text>
+          <Text style={styles.itemText}>{item.USE_DATE}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.deleteContainer}
+          onPress={() => deleteItem(item.USE_ID)}>
+          <Text style={styles.deleteButton}>삭제</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.deleteContainer}
-        onPress={() => deleteItem(item.USE_ID)}>
-        <Text style={styles.deleteButton}>삭제</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
+    );
+  };
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -114,6 +133,15 @@ const styles = StyleSheet.create({
     //marginLeft: 'auto',
     color: '#fff',
   },
+  imageStyle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
 });
-
 export default ListScreen;

@@ -88,47 +88,6 @@ const CocktailRecipeScreen = () => {
     }
   };
 
-  //레시피 제조
-  // const makeRecipe = recipe => {
-  //   // // 레시피에 필요한 정보 추출
-  //   // const {
-  //   //   UserID,
-  //   //   title,
-  //   //   number1,
-  //   //   vol1,
-  //   //   number2,
-  //   //   vol2,
-  //   //   number3,
-  //   //   vol3,
-  //   //   number4,
-  //   //   vol4,
-  //   // } = recipe;
-
-  //   // // 서버로 보낼 데이터 객체 생성
-  //   const recipeData = {
-  //     UserID: 'test_name',
-  //     recipeTitle: 'test_recipe',
-  //     first: 30,
-  //     second: 30,
-  //     third: 30,
-  //     fourth: 30,
-  //   };
-  //   // 클라이언트 측에서 데이터를 로그에 출력
-  //   console.log('Sending data to server:', recipeData);
-  //   // 서버로 제조 요청을 보내는 부분
-  //   axios
-  //     .post('http://ceprjmaker.iptime.org:10000/make_cocktail', recipeData)
-  //     .then(response => {
-  //       console.log('Make successful', response.data);
-  //       // 서버로 제조 요청을 보내는 부분
-  //       console.log('Sending data to server:', recipeData);
-  //       // 제조 성공에 대한 처리를 여기에 추가할 수 있어
-  //     })
-  //     .catch(error => {
-  //       console.error('Make error', error);
-  //       // 제조 실패에 대한 처리를 여기에 추가할 수 있어
-  //     });
-  // };
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.addBtn} onPress={toggleModal}>

@@ -187,14 +187,14 @@ const MakeByMyselfScreen = ({navigation}) => {
           requestData,
         );
 
-        if (makeResponse.data) {
-          throw new Error('칵테일 제조가 완료 되었습니다.');
-        }
+        // if (makeResponse.data) {
+        //   throw new Error('칵테일 제조가 완료 되었습니다.');
+        // }
 
-        console.log('Success', makeResponse.data);
+        console.log('Success', makeResponse.data.success);
         Alert.alert(
-          '제조 요청',
-          '칵테일을 제조 중입니다.',
+          '제조 완료',
+          '칵테일을 제조가 완료 되었습니다.',
           [
             {
               text: '확인',
